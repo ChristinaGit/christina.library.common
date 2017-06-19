@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'kotlin-android'
 
 android {
@@ -18,5 +17,14 @@ android {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
+    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    compile "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle2Version"
+    compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle2Version"
+    compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxlifecycle2Version"
+    compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle2Version"
 }
