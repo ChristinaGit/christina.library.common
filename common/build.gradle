@@ -20,6 +20,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
+    compile "com.android.support:recyclerview-v7:$androidSupportVersion"
+
+    compile "org.jetbrains.anko:anko-commons:$ankoVersion"
+
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 

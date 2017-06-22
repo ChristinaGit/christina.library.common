@@ -1,6 +1,6 @@
 package moe.christina.common.android
 
 object AndroidConstant {
-    inline fun <reified TActivity> savedStateKey(key: String) = TActivity::class.qualifiedName + key
-    inline fun <reified TActivity> logTag() = TActivity::class.qualifiedName
+    inline fun <reified T> savedStateKey(key: String) = "${T::class.qualifiedName}:$key"
+    inline fun <reified T> logTag() = T::class.qualifiedName
 }
