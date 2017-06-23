@@ -9,14 +9,16 @@ import moe.christina.common.android.coordination.visibility.VisibilityChanger
 
 open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
     companion object {
+        @JvmStatic
+        protected var reservedIdIndexer = 0
+
+        @JvmStatic
+        protected fun newReservedId() = --reservedIdIndexer
+
         val defaultVisibilityChanger: VisibilityChanger by lazy(LazyThreadSafetyMode.NONE) {
             SimpleVisibilityChanger()
         }
     }
-
-    private val views = SparseArray<View>()
-    private val viewsVisibility = SparseBooleanArray()
-    private val visibilityChangers = SparseArray<VisibilityChanger>()
 
     override final fun getView(id: Int): View? = views[id, null]
     override final fun setView(id: Int, view: View?) {
@@ -75,4 +77,8 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
     protected fun performChangeVisibility(id: Int, view: View, visible: Boolean) {
         getVisibilityChanger(id).changeVisibility(view, visible)
     }
+
+    private val views = SparseArray<View>()
+    private val viewsVisibility = SparseBooleanArray()
+    private val visibilityChangers = SparseArray<VisibilityChanger>()
 }

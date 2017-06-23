@@ -1,8 +1,10 @@
 package moe.christina.common.android.support
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import moe.christina.common.android.ActivityResultProvider
@@ -13,14 +15,14 @@ import moe.christina.common.android.event.RequestPermissionsResultEvent
 abstract class ObservableAppCompatActivity : RxAppCompatActivity(),
         ActivityResultProvider,
         RequestPermissionsResultProvider {
-    override val onRequestPermissionsResult: io.reactivex.Observable<RequestPermissionsResultEvent>
+    override final val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
         get() = requestPermissionsResultSubject.hide()
 
-    override val onActivityResult: io.reactivex.Observable<ActivityResultEvent>
+    override final val onActivityResult: Observable<ActivityResultEvent>
         get() = activityResultSubject.hide()
 
     @CallSuper
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
         activityResultSubject.onNext(ActivityResultEvent(requestCode, resultCode, data))

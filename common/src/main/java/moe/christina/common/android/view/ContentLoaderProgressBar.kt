@@ -11,10 +11,11 @@ import android.widget.ProgressBar
 
 open class ContentLoaderProgressBar : ProgressBar {
     companion object {
+        @JvmStatic
         val MINIMUM_SHOW_TIME = 500L
-
+        @JvmStatic
         val MINIMUM_DELAY = 500L
-
+        @JvmStatic
         private val NO_TIME = -1L
     }
 
@@ -76,7 +77,6 @@ open class ContentLoaderProgressBar : ProgressBar {
         }
     }
 
-    @CallSuper
     private fun initialize(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
         shown = visibility == View.VISIBLE
     }

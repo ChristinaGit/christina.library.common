@@ -2,7 +2,7 @@ package moe.christina.common.android.coordination.visibility
 
 import android.view.View
 
-open class SimpleVisibilityChanger(private val hideVisibility: Int = DEFAULT_HIDE_VISIBILITY) : VisibilityChanger {
+open class SimpleVisibilityChanger(val hideVisibility: Int = SimpleVisibilityChanger.DEFAULT_HIDE_VISIBILITY) : VisibilityChanger {
     companion object {
         val DEFAULT_HIDE_VISIBILITY: Int = View.GONE;
     }

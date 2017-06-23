@@ -9,33 +9,48 @@ abstract class WrappedRecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder>
         @JvmStatic
         val VIEW_TYPE_HEADER = newViewType()
         @JvmStatic
-        val VIEW_TYPE_FOOTER = newViewType()
-        @JvmStatic
         val VIEW_TYPE_INNER = newViewType()
+        @JvmStatic
+        val VIEW_TYPE_FOOTER = newViewType()
+    }
+
+    fun notifyHeaderItemsChanged() {
+        val itemCount = headerItemCount
+        if (itemCount > 0) {
+            notifyItemRangeChanged(getHeaderItemAdapterPosition(0), itemCount)
+        }
+    }
+
+    fun notifyInnerItemsChanged() {
+        val itemCount = innerItemCount
+        if (itemCount > 0) {
+            notifyItemRangeChanged(getInnerItemAdapterPosition(0), itemCount)
+        }
+    }
+
+    fun notifyFooterItemsChanged() {
+        val itemCount = footerItemCount
+        if (itemCount > 0) {
+            notifyItemRangeChanged(getFooterItemAdapterPosition(0), itemCount)
+        }
     }
 
     override fun getItemCount(): Int = headerItemCount + innerItemCount + footerItemCount
 
-    val headerItemCount: Int
+    open val headerItemCount: Int
         get() = 0
 
     abstract val innerItemCount: Int
 
-    val footerItemCount: Int
+    open val footerItemCount: Int
         get() = 0
 
     @CallSuper
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TViewHolder {
-        val holder: TViewHolder
-
-        holder = when {
-            isHeaderItemViewType(viewType) -> onCreateHeaderItemViewHolder(parent, viewType)
-            isInnerItemViewType(viewType) -> onCreateInnerItemViewHolder(parent, viewType)
-            isFooterItemViewType(viewType) -> onCreateFooterItemViewHolder(parent, viewType)
-            else -> throw IllegalArgumentException("Unknown view type: " + viewType)
-        }
-
-        return holder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TViewHolder = when {
+        isHeaderItemViewType(viewType) -> onCreateHeaderItemViewHolder(parent, viewType)
+        isInnerItemViewType(viewType) -> onCreateInnerItemViewHolder(parent, viewType)
+        isFooterItemViewType(viewType) -> onCreateFooterItemViewHolder(parent, viewType)
+        else -> throw IllegalArgumentException("Unknown view type: " + viewType)
     }
 
     @CallSuper
@@ -51,8 +66,6 @@ abstract class WrappedRecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder>
 
     @CallSuper
     override fun getItemViewType(position: Int): Int {
-        val viewType: Int
-
         val headerItemCount = headerItemCount
         val innerItemCount = innerItemCount
         val footerItemCount = footerItemCount
@@ -61,14 +74,12 @@ abstract class WrappedRecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder>
         val innerItemIndex = headerItemIndex + innerItemCount
         val footerItemIndex = innerItemIndex + footerItemCount
 
-        viewType = when (position) {
+        return when (position) {
             in 0..(headerItemIndex - 1) -> getHeaderItemViewType(position)
             in headerItemIndex..(innerItemIndex - 1) -> getInnerItemViewType(position)
             in innerItemIndex..(footerItemIndex - 1) -> getFooterItemViewType(position)
             else -> throw IllegalArgumentException("Illegal position: " + position)
         }
-
-        return viewType
     }
 
     protected open fun getHeaderItemViewType(position: Int): Int = VIEW_TYPE_HEADER
@@ -112,11 +123,4 @@ abstract class WrappedRecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder>
 
     protected open fun onCreateFooterItemViewHolder(parent: ViewGroup, viewType: Int): TViewHolder =
             throw IllegalArgumentException("Unknown view type: " + viewType)
-
-    fun notifyInnerItemsChanged() {
-        val innerItemCount = innerItemCount
-        if (innerItemCount > 0) {
-            notifyItemRangeChanged(getInnerItemAdapterPosition(0), innerItemCount)
-        }
-    }
 }

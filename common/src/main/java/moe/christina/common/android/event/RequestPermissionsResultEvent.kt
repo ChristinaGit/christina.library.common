@@ -3,7 +3,10 @@ package moe.christina.common.android.event
 import java.util.Arrays
 import java.util.Objects
 
-data class RequestPermissionsResultEvent(val requestCode: Int, val permissions: Array<String>, var grantResults: IntArray) {
+data class RequestPermissionsResultEvent(
+        val requestCode: Int,
+        val permissions: Array<String>,
+        var grantResults: IntArray) {
     override fun equals(other: Any?): Boolean {
         if (other !is RequestPermissionsResultEvent)
             return false

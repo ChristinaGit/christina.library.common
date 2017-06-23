@@ -15,10 +15,10 @@ import moe.christina.common.android.event.RequestPermissionsResultEvent
 abstract class ObservableFragment : RxFragment(),
         ActivityResultProvider,
         RequestPermissionsResultProvider {
-    override val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
+    override final val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
         get() = requestPermissionsResultSubject.hide()
 
-    override val onActivityResult: Observable<ActivityResultEvent>
+    override final val onActivityResult: Observable<ActivityResultEvent>
         get() = activityResultSubject.hide()
 
     @CallSuper

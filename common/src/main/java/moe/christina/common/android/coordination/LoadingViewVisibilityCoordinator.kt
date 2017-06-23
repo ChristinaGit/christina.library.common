@@ -4,21 +4,14 @@ import android.view.View
 
 open class LoadingViewVisibilityCoordinator : ViewVisibilityCoordinatorBase() {
     companion object {
-        val CONTENT_VIEW_ID: Int
-        val NO_CONTENT_VIEW_ID: Int
-        val LOADING_VIEW_ID: Int
-        val ERROR_VIEW_ID: Int
-        val LAST_RESERVED_VIEW_ID: Int
-
-        init {
-            var id = 0
-
-            CONTENT_VIEW_ID = --id
-            NO_CONTENT_VIEW_ID = --id
-            LOADING_VIEW_ID = --id
-            ERROR_VIEW_ID = --id
-            LAST_RESERVED_VIEW_ID = id
-        }
+        @JvmStatic
+        val CONTENT_VIEW_ID = newReservedId()
+        @JvmStatic
+        val NO_CONTENT_VIEW_ID = newReservedId()
+        @JvmStatic
+        val LOADING_VIEW_ID = newReservedId()
+        @JvmStatic
+        val ERROR_VIEW_ID = newReservedId()
     }
 
     var contentVisibilityChanger
@@ -76,7 +69,7 @@ open class LoadingViewVisibilityCoordinator : ViewVisibilityCoordinatorBase() {
         invalidateView(ERROR_VIEW_ID)
     }
 
-    fun showContent(hasContent: Boolean = true) {
+    fun showContentView(hasContent: Boolean = true) {
         if (hasContent) {
             isContentViewVisible = true
             isNoContentViewVisible = false
@@ -89,14 +82,14 @@ open class LoadingViewVisibilityCoordinator : ViewVisibilityCoordinatorBase() {
         isErrorViewVisible = false
     }
 
-    fun showError() {
+    fun showErrorView() {
         isContentViewVisible = false
         isNoContentViewVisible = false
         isLoadingViewVisible = false
         isErrorViewVisible = true
     }
 
-    fun showLoading() {
+    fun showLoadingView() {
         isContentViewVisible = false
         isNoContentViewVisible = false
         isLoadingViewVisible = true

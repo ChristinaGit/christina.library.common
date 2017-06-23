@@ -12,12 +12,13 @@ abstract class RecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder> : Recy
         val UNKNOWN_VIEW_TYPE = 0;
         @JvmStatic
         protected var viewTypeIndexer = UNKNOWN_VIEW_TYPE
+
         @JvmStatic
-        protected fun newViewType(): Int = ++viewTypeIndexer
+        protected fun newViewType() = ++viewTypeIndexer
     }
 
     protected fun inflateView(@LayoutRes layoutId: Int, parent: ViewGroup): View {
-        if (_layoutInflater == null) {
+        if (_layoutInflater === null) {
             _layoutInflater = LayoutInflater.from(parent.context)
         }
 
