@@ -7,6 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -17,18 +18,25 @@ android {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
-    compile "com.android.support:recyclerview-v7:$androidSupportVersion"
+    api "com.android.support:recyclerview-v7:$androidSupportVersion"
 
-    compile "org.jetbrains.anko:anko-commons:$ankoVersion"
+    api "org.jetbrains.anko:anko-commons:$ankoVersion"
 
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    api "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
 
-    compile "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle2Version"
-    compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle2Version"
-    compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxlifecycle2Version"
-    compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle2Version"
+    api "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle2Version"
+    api "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle2Version"
+    api "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxlifecycle2Version"
+    api "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle2Version"
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.47'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation "org.mockito:mockito-android:2.8.47"
 }

@@ -50,7 +50,7 @@ abstract class WrappedRecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder>
         isHeaderItemViewType(viewType) -> onCreateHeaderItemViewHolder(parent, viewType)
         isInnerItemViewType(viewType) -> onCreateInnerItemViewHolder(parent, viewType)
         isFooterItemViewType(viewType) -> onCreateFooterItemViewHolder(parent, viewType)
-        else -> throw IllegalArgumentException("Unknown view type: " + viewType)
+        else -> errorUnknownViewType(viewType)
     }
 
     @CallSuper
@@ -60,67 +60,142 @@ abstract class WrappedRecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder>
             isHeaderItemViewType(viewType) -> onBindHeaderItemViewHolder(holder, position)
             isInnerItemViewType(viewType) -> onBindInnerItemViewHolder(holder, position)
             isFooterItemViewType(viewType) -> onBindFooterItemViewHolder(holder, position)
-            else -> throw IllegalArgumentException("Unknown view type: $viewType at position $position")
+            else -> errorUnknownViewType(viewType, position)
         }
     }
 
     @CallSuper
-    override fun getItemViewType(position: Int): Int {
-        val headerItemCount = headerItemCount
-        val innerItemCount = innerItemCount
-        val footerItemCount = footerItemCount
+    override fun getItemViewType(position: Int) =
+            when (position) {
+                in getHeaderItemValidPositionRange() -> getHeaderItemViewType(position)
+                in getInnerItemValidPositionRange() -> getInnerItemViewType(position)
+                in getFooterItemValidPositionRange() -> getFooterItemViewType(position)
+                else -> errorNoItemByPosition(position)
+            }
 
-        val headerItemIndex = headerItemCount
-        val innerItemIndex = headerItemIndex + innerItemCount
-        val footerItemIndex = innerItemIndex + footerItemCount
+    open fun getHeaderItemViewType(position: Int): Int {
+        checkHeaderItemPosition(position)
 
-        return when (position) {
-            in 0..(headerItemIndex - 1) -> getHeaderItemViewType(position)
-            in headerItemIndex..(innerItemIndex - 1) -> getInnerItemViewType(position)
-            in innerItemIndex..(footerItemIndex - 1) -> getFooterItemViewType(position)
-            else -> throw IllegalArgumentException("Illegal position: " + position)
+        return VIEW_TYPE_HEADER
+    }
+
+    open fun getInnerItemViewType(position: Int): Int {
+        checkInnerItemPosition(position)
+
+        return VIEW_TYPE_INNER
+    }
+
+    open fun getFooterItemViewType(position: Int): Int {
+        checkFooterItemPosition(position)
+
+        return VIEW_TYPE_FOOTER
+    }
+
+    open fun isHeaderItemViewType(viewType: Int): Boolean = viewType == VIEW_TYPE_HEADER
+
+    open fun isInnerItemViewType(viewType: Int): Boolean = viewType == VIEW_TYPE_INNER
+
+    open fun isFooterItemViewType(viewType: Int): Boolean = viewType == VIEW_TYPE_FOOTER
+
+    fun getHeaderItemRelativePosition(position: Int): Int {
+        checkHeaderItemPosition(position)
+
+        return position
+    }
+
+    fun getInnerItemRelativePosition(position: Int): Int {
+        checkInnerItemPosition(position)
+
+        return position - headerItemCount
+    }
+
+    fun getFooterItemRelativePosition(position: Int): Int {
+        checkFooterItemPosition(position)
+
+        return position - headerItemCount - innerItemCount
+    }
+
+    fun getHeaderItemAdapterPosition(relativePosition: Int): Int {
+        checkHeaderItemRelativePosition(relativePosition)
+
+        return relativePosition
+    }
+
+    fun getInnerItemAdapterPosition(relativePosition: Int): Int {
+        checkInnerItemRelativePosition(relativePosition)
+
+        return relativePosition + headerItemCount
+    }
+
+    fun getFooterItemAdapterPosition(relativePosition: Int): Int {
+        checkFooterItemRelativePosition(relativePosition)
+
+        return relativePosition + headerItemCount + innerItemCount
+    }
+
+    open fun onBindHeaderItemViewHolder(holder: TViewHolder, position: Int) {}
+
+    open fun onBindInnerItemViewHolder(holder: TViewHolder, position: Int) {}
+
+    open fun onBindFooterItemViewHolder(holder: TViewHolder, position: Int) {}
+
+    open fun onCreateHeaderItemViewHolder(parent: ViewGroup, viewType: Int): TViewHolder =
+            errorUnknownViewType(viewType)
+
+    open fun onCreateInnerItemViewHolder(parent: ViewGroup, viewType: Int): TViewHolder =
+            errorUnknownViewType(viewType)
+
+    open fun onCreateFooterItemViewHolder(parent: ViewGroup, viewType: Int): TViewHolder =
+            errorUnknownViewType(viewType)
+
+    fun getHeaderItemValidPositionRange() =
+            0..(headerItemCount - 1)
+
+    fun getInnerItemValidPositionRange() =
+            headerItemCount..(headerItemCount + innerItemCount - 1)
+
+    fun getFooterItemValidPositionRange() =
+            (headerItemCount + innerItemCount)..(headerItemCount + innerItemCount + footerItemCount - 1)
+
+    fun getHeaderItemValidRelativePositionRange() = 0..(headerItemCount - 1)
+
+    fun getInnerItemValidRelativePositionRange() = 0..(innerItemCount - 1)
+
+    fun getFooterItemValidRelativePositionRange() = 0..(footerItemCount - 1)
+
+    protected fun checkHeaderItemPosition(position: Int) {
+        if (position !in getHeaderItemValidPositionRange()) {
+            throw errorNoItemByPosition(position)
         }
     }
 
-    protected open fun getHeaderItemViewType(position: Int): Int = VIEW_TYPE_HEADER
-
-    protected open fun getInnerItemViewType(position: Int): Int = VIEW_TYPE_INNER
-
-    protected open fun getFooterItemViewType(position: Int): Int = VIEW_TYPE_FOOTER
-
-    protected open fun isHeaderItemViewType(viewType: Int): Boolean = viewType == VIEW_TYPE_HEADER
-
-    protected open fun isInnerItemViewType(viewType: Int): Boolean = viewType == VIEW_TYPE_INNER
-
-    protected open fun isFooterItemViewType(viewType: Int): Boolean = viewType == VIEW_TYPE_FOOTER
-
-    protected fun getHeaderItemRelativePosition(position: Int): Int = position
-
-    protected fun getInnerItemRelativePosition(position: Int): Int = position - headerItemCount
-
-    protected fun getFooterItemRelativePosition(position: Int): Int = position - headerItemCount - innerItemCount
-
-    protected fun getHeaderItemAdapterPosition(relativePosition: Int): Int = relativePosition
-
-    protected fun getInnerItemAdapterPosition(relativePosition: Int): Int = relativePosition + headerItemCount
-
-    protected fun getFooterItemAdapterPosition(relativePosition: Int): Int = relativePosition + headerItemCount + innerItemCount
-
-    protected open fun onBindHeaderItemViewHolder(holder: TViewHolder, position: Int) {
+    protected fun checkInnerItemPosition(position: Int) {
+        if (position !in getInnerItemValidPositionRange()) {
+            throw errorNoItemByPosition(position)
+        }
     }
 
-    protected open fun onBindInnerItemViewHolder(holder: TViewHolder, position: Int) {
+    protected fun checkFooterItemPosition(position: Int) {
+        if (position !in getFooterItemValidPositionRange()) {
+            throw errorNoItemByPosition(position)
+        }
     }
 
-    protected open fun onBindFooterItemViewHolder(holder: TViewHolder, position: Int) {
+    protected fun checkHeaderItemRelativePosition(position: Int) {
+        if (position !in getHeaderItemValidPositionRange()) {
+            throw errorNoItemByRelativePosition(position)
+        }
     }
 
-    protected open fun onCreateHeaderItemViewHolder(parent: ViewGroup, viewType: Int): TViewHolder =
-            throw IllegalArgumentException("Unknown view type: " + viewType)
+    protected fun checkInnerItemRelativePosition(position: Int) {
+        if (position !in getInnerItemValidRelativePositionRange()) {
+            throw errorNoItemByRelativePosition(position)
+        }
+    }
 
-    protected open fun onCreateInnerItemViewHolder(parent: ViewGroup, viewType: Int): TViewHolder =
-            throw IllegalArgumentException("Unknown view type: " + viewType)
-
-    protected open fun onCreateFooterItemViewHolder(parent: ViewGroup, viewType: Int): TViewHolder =
-            throw IllegalArgumentException("Unknown view type: " + viewType)
+    protected fun checkFooterItemRelativePosition(position: Int) {
+        if (position !in getFooterItemValidRelativePositionRange()) {
+            throw errorNoItemByRelativePosition(position)
+        }
+    }
 }

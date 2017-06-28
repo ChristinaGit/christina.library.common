@@ -10,11 +10,12 @@ import moe.christina.common.android.coordination.visibility.VisibilityChanger
 open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
     companion object {
         @JvmStatic
-        protected var reservedIdIndexer = 0
+        protected var reservedViewIdIndexer = 0
 
         @JvmStatic
-        protected fun newReservedId() = --reservedIdIndexer
+        protected fun newReservedViewId() = --reservedViewIdIndexer
 
+        @JvmStatic
         val defaultVisibilityChanger: VisibilityChanger by lazy(LazyThreadSafetyMode.NONE) {
             SimpleVisibilityChanger()
         }
@@ -32,7 +33,7 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
     override final fun getVisibilityChanger(id: Int): VisibilityChanger = visibilityChangers[id, null] ?: visibilityChanger
     override final fun setVisibilityChanger(id: Int, changer: VisibilityChanger?) = visibilityChangers.append(id, changer)
 
-    override fun setViewVisibility(id: Int, visible: Boolean) {
+    override final fun setViewVisibility(id: Int, visible: Boolean) {
         val currentVisibility = isViewVisible(id)
         if (visible != currentVisibility) {
             viewsVisibility.append(id, visible)
@@ -43,7 +44,7 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
 
     override final fun isViewVisible(id: Int): Boolean = viewsVisibility[id, false]
 
-    override fun invalidateView(id: Int) {
+    override final fun invalidateView(id: Int) {
         performChangeVisibility(id, isViewVisible(id))
     }
 
@@ -51,19 +52,19 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
         performChangeVisibility(id, view, isViewVisible(id))
     }
 
-    override fun showAllViews() {
+    override final fun showAllViews() {
         viewsVisibility.forEach { id, visible -> if (!visible) setViewVisibility(id, true) }
     }
 
-    override fun hideAllViews() {
+    override final fun hideAllViews() {
         viewsVisibility.forEach { id, visible -> if (visible) setViewVisibility(id, false) }
     }
 
-    override fun invalidateAllViews() {
+    override final fun invalidateAllViews() {
         views.forEach { id, view -> invalidateView(id, view) }
     }
 
-    override val isVisible: Boolean
+    override final val isVisible: Boolean
         get() = (0..viewsVisibility.size()).all { viewsVisibility.valueAt(it) }
 
     protected fun performChangeVisibility(id: Int, visible: Boolean) {

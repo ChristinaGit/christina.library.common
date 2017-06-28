@@ -4,22 +4,20 @@ import android.support.v7.widget.RecyclerView
 
 abstract class RecyclerViewListAdapter<TItem, TViewHolder : RecyclerView.ViewHolder>
     : WrappedRecyclerViewAdapter<TViewHolder>() {
-    companion object {
-        private fun throwNoItemByRelativePositionError(relativePosition: Int): Nothing =
-                throw IllegalArgumentException("No item by relative position: $relativePosition")
+
+    fun getInnerItem(position: Int): TItem =
+            getInnerItemByRelativePosition(getInnerItemRelativePosition(position))
+
+    fun getItem(position: Int): TItem = getInnerItem(position)
+
+    fun getInnerItemByRelativePosition(relativePosition: Int): TItem {
+        checkInnerItemRelativePosition(relativePosition)
+
+        return items!![relativePosition]
     }
 
-    fun getItem(position: Int): TItem {
-        return getItemByRelativePosition(getInnerItemRelativePosition(position))
-    }
-
-    fun getItemByRelativePosition(relativePosition: Int): TItem {
-        val items = items ?: throwNoItemByRelativePositionError(relativePosition)
-        return when (relativePosition) {
-            in 0..items.size -> items[relativePosition]
-            else -> throwNoItemByRelativePositionError(relativePosition)
-        }
-    }
+    fun getItemByRelativePosition(relativePosition: Int): TItem
+            = getInnerItemByRelativePosition(relativePosition)
 
     override val innerItemCount: Int
         get() = items?.size ?: 0

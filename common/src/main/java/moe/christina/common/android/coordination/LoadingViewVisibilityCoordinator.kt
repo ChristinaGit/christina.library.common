@@ -5,13 +5,13 @@ import android.view.View
 open class LoadingViewVisibilityCoordinator : ViewVisibilityCoordinatorBase() {
     companion object {
         @JvmStatic
-        val CONTENT_VIEW_ID = newReservedId()
+        val CONTENT_VIEW_ID = newReservedViewId()
         @JvmStatic
-        val NO_CONTENT_VIEW_ID = newReservedId()
+        val NO_CONTENT_VIEW_ID = newReservedViewId()
         @JvmStatic
-        val LOADING_VIEW_ID = newReservedId()
+        val LOADING_VIEW_ID = newReservedViewId()
         @JvmStatic
-        val ERROR_VIEW_ID = newReservedId()
+        val ERROR_VIEW_ID = newReservedViewId()
     }
 
     var contentVisibilityChanger
@@ -53,21 +53,15 @@ open class LoadingViewVisibilityCoordinator : ViewVisibilityCoordinatorBase() {
         get() = isViewVisible(ERROR_VIEW_ID)
         set(value) = setViewVisibility(ERROR_VIEW_ID, value)
 
-    fun invalidateContentView() {
-        invalidateView(CONTENT_VIEW_ID)
-    }
+    fun setContentViewVisibility(visible: Boolean) = setViewVisibility(CONTENT_VIEW_ID, visible)
+    fun setNoContentViewVisibility(visible: Boolean) = setViewVisibility(NO_CONTENT_VIEW_ID, visible)
+    fun setLoadingViewVisibility(visible: Boolean) = setViewVisibility(LOADING_VIEW_ID, visible)
+    fun setErrorViewVisibility(visible: Boolean) = setViewVisibility(ERROR_VIEW_ID, visible)
 
-    fun invalidateNoContentView() {
-        invalidateView(NO_CONTENT_VIEW_ID)
-    }
-
-    fun invalidateLoadingView() {
-        invalidateView(LOADING_VIEW_ID)
-    }
-
-    fun invalidateErrorView() {
-        invalidateView(ERROR_VIEW_ID)
-    }
+    fun invalidateContentView() = invalidateView(CONTENT_VIEW_ID)
+    fun invalidateNoContentView() = invalidateView(NO_CONTENT_VIEW_ID)
+    fun invalidateLoadingView() = invalidateView(LOADING_VIEW_ID)
+    fun invalidateErrorView() = invalidateView(ERROR_VIEW_ID)
 
     fun showContentView(hasContent: Boolean = true) {
         if (hasContent) {

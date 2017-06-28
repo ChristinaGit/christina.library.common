@@ -16,16 +16,16 @@ abstract class ObservableAppCompatActivity : RxAppCompatActivity(),
         ActivityResultProvider,
         RequestPermissionsResultProvider {
     override final val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
-        get() = requestPermissionsResultSubject.hide()
+        get() = onRequestPermissionsResultSubject.hide()
 
     override final val onActivityResult: Observable<ActivityResultEvent>
-        get() = activityResultSubject.hide()
+        get() = onActivityResultSubject.hide()
 
     @CallSuper
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        activityResultSubject.onNext(ActivityResultEvent(requestCode, resultCode, data))
+        riseOnActivityResultEvent(ActivityResultEvent(requestCode, resultCode, data))
     }
 
     @CallSuper
@@ -35,7 +35,8 @@ abstract class ObservableAppCompatActivity : RxAppCompatActivity(),
             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        requestPermissionsResultSubject.onNext(RequestPermissionsResultEvent(requestCode, permissions, grantResults))
+        val event = RequestPermissionsResultEvent(requestCode, permissions.toList(), grantResults.toList())
+        riseOnRequestPermissionsResultEvent(event)
     }
 
     @CallSuper
@@ -60,6 +61,12 @@ abstract class ObservableAppCompatActivity : RxAppCompatActivity(),
     protected open fun onReleaseInjectedMembers() {
     }
 
-    private val activityResultSubject: Subject<ActivityResultEvent> = PublishSubject.create()
-    private val requestPermissionsResultSubject: Subject<RequestPermissionsResultEvent> = PublishSubject.create()
+    private fun riseOnActivityResultEvent(event: ActivityResultEvent) =
+            onActivityResultSubject.onNext(event)
+
+    private fun riseOnRequestPermissionsResultEvent(event: RequestPermissionsResultEvent) =
+            onRequestPermissionsResultSubject.onNext(event)
+
+    private val onActivityResultSubject: Subject<ActivityResultEvent> = PublishSubject.create()
+    private val onRequestPermissionsResultSubject: Subject<RequestPermissionsResultEvent> = PublishSubject.create()
 }

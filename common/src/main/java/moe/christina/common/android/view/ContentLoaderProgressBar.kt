@@ -56,12 +56,12 @@ open class ContentLoaderProgressBar : ProgressBar {
     }
 
     @CallSuper
-    open fun reset(shown: Boolean) {
+    open fun reset(show: Boolean) {
         removeCallbacks(hideCallback)
         removeCallbacks(showCallback)
-        this.shown = shown
+        shown = show
         startTime = NO_TIME
-        visibility = if (shown) View.VISIBLE else View.GONE
+        visibility = if (show) View.VISIBLE else View.GONE
     }
 
     @CallSuper
@@ -75,10 +75,6 @@ open class ContentLoaderProgressBar : ProgressBar {
                 }
             }
         }
-    }
-
-    private fun initialize(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
-        shown = visibility == View.VISIBLE
     }
 
     @CallSuper
@@ -118,5 +114,9 @@ open class ContentLoaderProgressBar : ProgressBar {
     private val showCallback = Runnable {
         startTime = SystemClock.uptimeMillis()
         visibility = View.VISIBLE
+    }
+
+    private fun initialize(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
+        shown = visibility == View.VISIBLE
     }
 }
