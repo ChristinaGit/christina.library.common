@@ -21,6 +21,7 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
+    api "com.android.support:appcompat-v7:$androidSupportVersion"
     api "com.android.support:recyclerview-v7:$androidSupportVersion"
 
     api "org.jetbrains.anko:anko-commons:$ankoVersion"
@@ -31,7 +32,6 @@ dependencies {
     api "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle2Version"
     api "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle2Version"
     api "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxlifecycle2Version"
-    api "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle2Version"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.47'

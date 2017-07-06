@@ -4,8 +4,8 @@ import android.support.annotation.CallSuper
 import android.view.View
 import moe.christina.common.android.view.ContentLoaderProgressBar
 
-class ProgressVisibilityChanger(
-        hideVisibility: Int = SimpleVisibilityChanger.DEFAULT_HIDE_VISIBILITY)
+open class ProgressVisibilityChanger(
+    hideVisibility: Int = SimpleVisibilityChanger.DEFAULT_HIDE_VISIBILITY)
     : SimpleVisibilityChanger(hideVisibility) {
     @CallSuper
     override fun changeVisibility(view: View, visible: Boolean) {

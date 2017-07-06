@@ -21,19 +21,19 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
         }
     }
 
-    override final fun getView(id: Int): View? = views[id, null]
-    override final fun setView(id: Int, view: View?) {
+    final override fun getView(id: Int): View? = views[id, null]
+    final override fun setView(id: Int, view: View?) {
         views.append(id, view)
 
         invalidateView(id)
     }
 
-    override final var visibilityChanger: VisibilityChanger = defaultVisibilityChanger
+    final override var visibilityChanger: VisibilityChanger = defaultVisibilityChanger
 
-    override final fun getVisibilityChanger(id: Int): VisibilityChanger = visibilityChangers[id, null] ?: visibilityChanger
-    override final fun setVisibilityChanger(id: Int, changer: VisibilityChanger?) = visibilityChangers.append(id, changer)
+    final override fun getVisibilityChanger(id: Int): VisibilityChanger = visibilityChangers[id, null] ?: visibilityChanger
+    final override fun setVisibilityChanger(id: Int, changer: VisibilityChanger?) = visibilityChangers.append(id, changer)
 
-    override final fun setViewVisibility(id: Int, visible: Boolean) {
+    final override fun setViewVisibility(id: Int, visible: Boolean) {
         val currentVisibility = isViewVisible(id)
         if (visible != currentVisibility) {
             viewsVisibility.append(id, visible)
@@ -42,9 +42,9 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
         }
     }
 
-    override final fun isViewVisible(id: Int): Boolean = viewsVisibility[id, false]
+    final override fun isViewVisible(id: Int): Boolean = viewsVisibility[id, false]
 
-    override final fun invalidateView(id: Int) {
+    final override fun invalidateView(id: Int) {
         performChangeVisibility(id, isViewVisible(id))
     }
 
@@ -52,19 +52,19 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
         performChangeVisibility(id, view, isViewVisible(id))
     }
 
-    override final fun showAllViews() {
+    final override fun showAllViews() {
         viewsVisibility.forEach { id, visible -> if (!visible) setViewVisibility(id, true) }
     }
 
-    override final fun hideAllViews() {
+    final override fun hideAllViews() {
         viewsVisibility.forEach { id, visible -> if (visible) setViewVisibility(id, false) }
     }
 
-    override final fun invalidateAllViews() {
+    final override fun invalidateAllViews() {
         views.forEach { id, view -> invalidateView(id, view) }
     }
 
-    override final val isVisible: Boolean
+    final override val isVisible: Boolean
         get() = (0..viewsVisibility.size()).all { viewsVisibility.valueAt(it) }
 
     protected fun performChangeVisibility(id: Int, visible: Boolean) {

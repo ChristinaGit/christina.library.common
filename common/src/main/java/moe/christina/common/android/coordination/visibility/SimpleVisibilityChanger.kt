@@ -4,7 +4,7 @@ import android.support.annotation.CallSuper
 import android.view.View
 
 open class SimpleVisibilityChanger(
-        val hideVisibility: Int = SimpleVisibilityChanger.DEFAULT_HIDE_VISIBILITY)
+    val hideVisibility: Int = SimpleVisibilityChanger.DEFAULT_HIDE_VISIBILITY)
     : VisibilityChanger {
     companion object {
         @JvmStatic

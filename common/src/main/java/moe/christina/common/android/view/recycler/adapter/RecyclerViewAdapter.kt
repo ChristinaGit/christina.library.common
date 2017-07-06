@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-abstract class RecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder> : RecyclerView.Adapter<TViewHolder>() {
+abstract class RecyclerViewAdapter<TVH : RecyclerView.ViewHolder> : RecyclerView.Adapter<TVH>() {
     companion object {
         @JvmStatic
         val UNKNOWN_VIEW_TYPE = 0;
@@ -15,22 +15,6 @@ abstract class RecyclerViewAdapter<TViewHolder : RecyclerView.ViewHolder> : Recy
 
         @JvmStatic
         protected fun newViewType() = ++viewTypeIndexer
-
-        @JvmStatic
-        protected fun errorNoItemByPosition(relativePosition: Int): Nothing =
-                throw IllegalArgumentException("No item by position: $relativePosition")
-
-        @JvmStatic
-        protected fun errorNoItemByRelativePosition(relativePosition: Int): Nothing =
-                throw IllegalArgumentException("No item by relative position: $relativePosition")
-
-        @JvmStatic
-        protected fun errorUnknownViewType(viewType: Int): Nothing =
-                throw IllegalArgumentException("Unknown view type: " + viewType)
-
-        @JvmStatic
-        protected fun errorUnknownViewType(viewType: Int, position: Int): Nothing =
-                throw IllegalArgumentException("Unknown view type: $viewType at position $position")
     }
 
     protected fun inflateView(@LayoutRes layoutId: Int, parent: ViewGroup): View {

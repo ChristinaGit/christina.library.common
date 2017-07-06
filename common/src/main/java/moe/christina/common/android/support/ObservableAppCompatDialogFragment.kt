@@ -5,13 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.CheckResult
-import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatDialogFragment
 import android.view.View
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.trello.rxlifecycle2.RxLifecycle
 import com.trello.rxlifecycle2.android.FragmentEvent
-import com.trello.rxlifecycle2.android.RxLifecycleAndroid
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid.bindFragment
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -21,7 +21,7 @@ import moe.christina.common.android.RequestPermissionsResultProvider
 import moe.christina.common.android.event.ActivityResultEvent
 import moe.christina.common.android.event.RequestPermissionsResultEvent
 
-abstract class ObservableFragment : Fragment(),
+abstract class ObservableAppCompatDialogFragment : AppCompatDialogFragment(),
     ActivityResultProvider,
     RequestPermissionsResultProvider,
     LifecycleProvider<FragmentEvent> {
@@ -39,8 +39,7 @@ abstract class ObservableFragment : Fragment(),
         RxLifecycle.bindUntilEvent<T, FragmentEvent>(lifecycleSubject, event)
 
     @CheckResult
-    final override  fun <T> bindToLifecycle(): LifecycleTransformer<T> =
-        RxLifecycleAndroid.bindFragment<T>(lifecycleSubject)
+    final override  fun <T> bindToLifecycle(): LifecycleTransformer<T> = bindFragment<T>(lifecycleSubject)
 
     @CallSuper
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {

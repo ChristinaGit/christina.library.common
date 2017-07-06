@@ -28,13 +28,13 @@ open class ContentLoaderProgressBar : ProgressBar {
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-            : super(context, attrs, defStyleAttr) {
+        : super(context, attrs, defStyleAttr) {
         initialize(attrs, defStyleAttr, 0)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int)
-            : super(context, attrs, defStyleAttr, defStyleRes) {
+        : super(context, attrs, defStyleAttr, defStyleRes) {
         initialize(attrs, defStyleAttr, defStyleRes)
     }
 
