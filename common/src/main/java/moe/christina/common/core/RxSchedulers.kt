@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 object RxSchedulers {
     fun io(): Scheduler = Schedulers.io()
     fun computation(): Scheduler = Schedulers.computation()
-    fun newThread(): Scheduler = Schedulers.newThread()
+    fun new(): Scheduler = Schedulers.newThread()
     fun main(): Scheduler = AndroidSchedulers.mainThread()
     fun from(looper: Looper): Scheduler = AndroidSchedulers.from(looper)
 }

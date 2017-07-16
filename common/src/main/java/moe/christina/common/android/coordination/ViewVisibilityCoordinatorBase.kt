@@ -65,7 +65,7 @@ open class ViewVisibilityCoordinatorBase : ViewVisibilityCoordinator {
     }
 
     final override val isVisible: Boolean
-        get() = (0..viewsVisibility.size()).all { viewsVisibility.valueAt(it) }
+        get() = (0 until viewsVisibility.size()).all { viewsVisibility.valueAt(it) }
 
     protected fun performChangeVisibility(id: Int, visible: Boolean) {
         val view = getView(id)

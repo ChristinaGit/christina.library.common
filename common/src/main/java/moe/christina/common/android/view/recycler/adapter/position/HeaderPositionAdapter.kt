@@ -4,13 +4,12 @@ import android.support.annotation.CallSuper
 import android.support.v7.widget.RecyclerView.Adapter
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.ViewGroup
-import moe.christina.common.android.view.recycler.adapter.position.PositionAdapter.ShiftProvider
 
-open class HeaderPositionAdapter<
+class HeaderPositionAdapter<
     THVH : ViewHolder,
     TIVH : ViewHolder,
-    TFVH : ViewHolder> : BasePositionAdapter<ViewHolder>() {
-    final override val itemCount: Int
+    TFVH : ViewHolder> : PositionAdapter<ViewHolder>() {
+    override val itemCount: Int
         get() = headerItemCount + innerItemCount + footerItemCount
 
     var bindViewHolderDelegate: BindViewHolderDelegate<THVH, TIVH, TFVH>
@@ -136,7 +135,7 @@ open class HeaderPositionAdapter<
     }
 
     @CallSuper
-    final override fun performCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+    override fun performCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         when {
             isHeaderItemViewType(viewType) -> {
                 val nestedPositionAdapter = headerItemPositionAdapter
@@ -166,7 +165,7 @@ open class HeaderPositionAdapter<
         }
 
     @CallSuper
-    final override fun performBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun performBindViewHolder(holder: ViewHolder, position: Int) {
         val viewType = getItemViewType(position)
         when {
             isHeaderItemViewType(viewType) -> {
@@ -197,13 +196,13 @@ open class HeaderPositionAdapter<
         }
     }
 
-    final override fun isKnownViewType(viewType: Int): Boolean =
+    override fun isKnownViewType(viewType: Int): Boolean =
         isHeaderItemViewType(viewType)
             || isInnerItemViewType(viewType)
             || isFooterItemViewType(viewType)
 
     @CallSuper
-    final override fun getItemViewType(position: Int) =
+    override fun getItemViewType(position: Int) =
         when (position) {
             in getHeaderItemPositionRange() -> getHeaderItemViewType(position)
             in getInnerItemPositionRange() -> getInnerItemViewType(position)
@@ -327,28 +326,28 @@ open class HeaderPositionAdapter<
 
     fun getHeaderItemPositionRange() =
         shift.let {
-            it..(it + headerItemCount - 1)
+            it until it + headerItemCount
         }
 
     fun getInnerItemPositionRange() =
         shift.let {
             val headerItemCount = headerItemCount
 
-            (it + headerItemCount)..(it + headerItemCount + innerItemCount - 1)
+            (it + headerItemCount) until (it + headerItemCount + innerItemCount)
         }
 
     fun getFooterItemPositionRange() =
         shift.let {
             val headerItemCount = headerItemCount
             val innerItemCount = innerItemCount
-            (it + headerItemCount + innerItemCount)..(it + headerItemCount + innerItemCount + footerItemCount - 1)
+            (it + headerItemCount + innerItemCount) until (it + headerItemCount + innerItemCount + footerItemCount)
         }
 
-    fun getHeaderItemIndexRange() = 0..(headerItemCount - 1)
+    fun getHeaderItemIndexRange() = 0 until headerItemCount
 
-    fun getInnerItemIndexRange() = 0..(innerItemCount - 1)
+    fun getInnerItemIndexRange() = 0 until innerItemCount
 
-    fun getFooterItemIndexRange() = 0..(footerItemCount - 1)
+    fun getFooterItemIndexRange() = 0 until footerItemCount
 
     private fun checkHeaderItemPosition(position: Int) {
         if (position !in getHeaderItemPositionRange()) {
@@ -407,13 +406,13 @@ open class HeaderPositionAdapter<
 
     interface BindViewHolderDelegate<THVH, TIVH, TFVH> {
         fun onCreateHeaderItemViewHolder(parent: ViewGroup, viewType: Int): THVH =
-            throw UnsupportedOperationException()
+            throw NotImplementedError()
 
         fun onCreateInnerItemViewHolder(parent: ViewGroup, viewType: Int): TIVH =
-            throw UnsupportedOperationException()
+            throw NotImplementedError()
 
         fun onCreateFooterItemViewHolder(parent: ViewGroup, viewType: Int): TFVH =
-            throw UnsupportedOperationException()
+            throw NotImplementedError()
 
         fun onBindHeaderItemViewHolder(holder: THVH, position: Int) {}
         fun onBindInnerItemViewHolder(holder: TIVH, position: Int) {}

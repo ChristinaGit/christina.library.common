@@ -7,6 +7,9 @@ import moe.christina.common.android.view.recycler.adapter.position.HeaderPositio
 import moe.christina.common.android.view.recycler.adapter.position.HeaderPositionAdapter.BindViewHolderDelegate
 import moe.christina.common.android.view.recycler.adapter.position.HeaderPositionAdapter.ItemCountDelegate
 import moe.christina.common.android.view.recycler.adapter.position.HeaderPositionAdapter.ViewTypeDelegate
+import moe.christina.common.android.view.recycler.adapter.position.notifyFooterItemsChanged
+import moe.christina.common.android.view.recycler.adapter.position.notifyHeaderItemsChanged
+import moe.christina.common.android.view.recycler.adapter.position.notifyInnerItemsChanged
 
 abstract class HeaderRecyclerViewAdapter<
     THVH : ViewHolder,
@@ -50,7 +53,7 @@ abstract class HeaderRecyclerViewAdapter<
     final override fun getItemCount(): Int = headerPositionAdapter.itemCount
     final override fun getItemViewType(position: Int) = headerPositionAdapter.getItemViewType(position)
 
-    fun notifyHeaderItemsChanged() = headerPositionAdapter.notifyHeaderItemsChanged(this)
-    fun notifyInnerItemsChanged() = headerPositionAdapter.notifyInnerItemsChanged(this)
-    fun notifyFooterItemsChanged() = headerPositionAdapter.notifyFooterItemsChanged(this)
+    fun notifyHeaderItemsChanged() = notifyHeaderItemsChanged(headerPositionAdapter)
+    fun notifyInnerItemsChanged() = notifyInnerItemsChanged(headerPositionAdapter)
+    fun notifyFooterItemsChanged() = notifyFooterItemsChanged(headerPositionAdapter)
 }

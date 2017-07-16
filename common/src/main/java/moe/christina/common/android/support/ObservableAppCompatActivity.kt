@@ -23,21 +23,21 @@ abstract class ObservableAppCompatActivity : AppCompatActivity(),
     ActivityResultProvider,
     RequestPermissionsResultProvider,
     LifecycleProvider<ActivityEvent> {
-    final override  val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
+    final override val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
         get() = onRequestPermissionsResultSubject.hide()
 
-    final override  val onActivityResult: Observable<ActivityResultEvent>
+    final override val onActivityResult: Observable<ActivityResultEvent>
         get() = onActivityResultSubject.hide()
 
     @CheckResult
-    final override  fun lifecycle(): Observable<ActivityEvent> = lifecycleSubject.hide()
+    final override fun lifecycle(): Observable<ActivityEvent> = lifecycleSubject.hide()
 
     @CheckResult
-    final override  fun <T> bindUntilEvent(event: ActivityEvent): LifecycleTransformer<T> =
+    final override fun <T> bindUntilEvent(event: ActivityEvent): LifecycleTransformer<T> =
         bindUntilEvent<T, ActivityEvent>(lifecycleSubject, event)
 
     @CheckResult
-    final override  fun <T> bindToLifecycle(): LifecycleTransformer<T> = bindActivity<T>(lifecycleSubject)
+    final override fun <T> bindToLifecycle(): LifecycleTransformer<T> = bindActivity<T>(lifecycleSubject)
 
     @CallSuper
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {

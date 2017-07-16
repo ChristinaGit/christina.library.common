@@ -25,21 +25,21 @@ abstract class ObservableFragment : Fragment(),
     ActivityResultProvider,
     RequestPermissionsResultProvider,
     LifecycleProvider<FragmentEvent> {
-    final override  val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
+    final override val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
         get() = onRequestPermissionsResultSubject.hide()
 
-    final override  val onActivityResult: Observable<ActivityResultEvent>
+    final override val onActivityResult: Observable<ActivityResultEvent>
         get() = onActivityResultSubject.hide()
 
     @CheckResult
-    final override  fun lifecycle(): Observable<FragmentEvent> = lifecycleSubject.hide()
+    final override fun lifecycle(): Observable<FragmentEvent> = lifecycleSubject.hide()
 
     @CheckResult
-    final override  fun <T> bindUntilEvent(event: FragmentEvent): LifecycleTransformer<T> =
+    final override fun <T> bindUntilEvent(event: FragmentEvent): LifecycleTransformer<T> =
         RxLifecycle.bindUntilEvent<T, FragmentEvent>(lifecycleSubject, event)
 
     @CheckResult
-    final override  fun <T> bindToLifecycle(): LifecycleTransformer<T> =
+    final override fun <T> bindToLifecycle(): LifecycleTransformer<T> =
         RxLifecycleAndroid.bindFragment<T>(lifecycleSubject)
 
     @CallSuper
