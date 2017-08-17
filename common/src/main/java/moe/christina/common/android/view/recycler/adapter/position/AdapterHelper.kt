@@ -3,8 +3,12 @@ package moe.christina.common.android.view.recycler.adapter.position
 import android.support.v7.widget.RecyclerView.Adapter
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.ViewGroup
+import moe.christina.common.core.adapter.position.PositionAdapter
 
-abstract class PositionAdapter<TVH : ViewHolder> {
+fun Adapter<*>.notifyItemsChanged(positionAdapter: AdapterHelper<*>) =
+    positionAdapter.notifyItemsChanged(this)
+
+abstract class AdapterHelper<VH : ViewHolder> {
     companion object {
         @JvmStatic
         protected fun errorNoItemByPosition(position: Int): Nothing =
@@ -23,35 +27,17 @@ abstract class PositionAdapter<TVH : ViewHolder> {
             throw IllegalArgumentException("Unknown view type: $viewType at position $position")
     }
 
-    interface ShiftProvider {
-        val shift: Int
-            get() = 0
-    }
+    abstract val positionAdapter: PositionAdapter
 
-    var shiftProvider: ShiftProvider = object : ShiftProvider {}
-
-    abstract val itemCount: Int
     abstract fun isKnownViewType(viewType: Int): Boolean
-
     abstract fun getItemViewType(position: Int): Int
-    abstract fun performCreateViewHolder(parent: ViewGroup, viewType: Int): TVH
-
-    abstract fun performBindViewHolder(holder: TVH, position: Int)
-
-    fun getItemPositionRange() =
-        shiftProvider.shift.let {
-            it until it + itemCount
-        }
-
-    fun getItemIndexRange() = 0 until itemCount
+    abstract fun performCreateViewHolder(parent: ViewGroup, viewType: Int): VH
+    abstract fun performBindViewHolder(holder: VH, position: Int)
 
     fun notifyItemsChanged(adapter: Adapter<*>) {
-        val itemCount = itemCount
+        val itemCount = positionAdapter.actualItemCount
         if (itemCount > 0) {
-            adapter.notifyItemRangeChanged(shiftProvider.shift, itemCount)
+            adapter.notifyItemRangeChanged(positionAdapter.actualShift, itemCount)
         }
     }
-
-    protected val shift: Int
-        get() = shiftProvider.shift
 }

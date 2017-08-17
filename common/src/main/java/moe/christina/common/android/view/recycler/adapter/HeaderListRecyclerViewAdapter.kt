@@ -10,7 +10,7 @@ abstract class HeaderListRecyclerViewAdapter<
     : HeaderRecyclerViewAdapter<THVH, TIVH, TFVH>() {
 
     fun getItem(position: Int): TItem =
-        items!![headerPositionAdapter.getInnerItemIndex(position)]
+        items!![headerPositionAdapter.getActualInnerItemIndex(position)]
 
     override val innerItemCount: Int
         get() = items?.size ?: 0

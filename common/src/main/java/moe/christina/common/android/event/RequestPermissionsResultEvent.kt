@@ -1,6 +1,6 @@
 package moe.christina.common.android.event
 
-import moe.christina.common.core.Event
+import moe.christina.common.core.event.Event
 
 open class RequestPermissionsResultEvent(
     val requestCode: Int,

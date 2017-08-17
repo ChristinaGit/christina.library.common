@@ -1,7 +1,7 @@
 package moe.christina.common.android.event
 
 import android.content.Intent
-import moe.christina.common.core.Event
+import moe.christina.common.core.event.Event
 
 open class ActivityResultEvent(
     val requestCode: Int,

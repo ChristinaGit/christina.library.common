@@ -3,10 +3,10 @@ package moe.christina.common.android.view.recycler.adapter
 import android.support.annotation.CallSuper
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.ViewGroup
-import moe.christina.common.android.view.recycler.adapter.position.HeaderPositionAdapter
-import moe.christina.common.android.view.recycler.adapter.position.HeaderPositionAdapter.BindViewHolderDelegate
-import moe.christina.common.android.view.recycler.adapter.position.HeaderPositionAdapter.ItemCountDelegate
-import moe.christina.common.android.view.recycler.adapter.position.HeaderPositionAdapter.ViewTypeDelegate
+import moe.christina.common.core.adapter.position.HeaderPositionAdapter
+import moe.christina.common.core.adapter.position.HeaderPositionAdapter.BindViewHolderDelegate
+import moe.christina.common.core.adapter.position.HeaderPositionAdapter.ItemCountDelegate
+import moe.christina.common.core.adapter.position.HeaderPositionAdapter.ViewTypeDelegate
 import moe.christina.common.android.view.recycler.adapter.position.notifyFooterItemsChanged
 import moe.christina.common.android.view.recycler.adapter.position.notifyHeaderItemsChanged
 import moe.christina.common.android.view.recycler.adapter.position.notifyInnerItemsChanged
