@@ -6,13 +6,13 @@ import collections.forEach
 abstract class StateCoordinator<T, S : Any>
 @JvmOverloads
 constructor(
-    val defaultStateChanger: StateChanger<T, S>? = null
+    var defaultStateChanger: StateChanger<T, S>? = null
 ) {
     fun setStateChanger(id: Int, stateChanger: StateChanger<T, S>?) {
         stateChangers.append(id, stateChanger)
     }
 
-    fun getStateChanger(id: Int): StateChanger<T, S>? = stateChangers[id]
+    fun getStateChanger(id: Int): StateChanger<T, S>? = stateChangers[id] ?: defaultStateChanger
 
     fun add(id: Int, target: T) {
         targets.append(id, target)
@@ -20,7 +20,7 @@ constructor(
         invalidate(id)
     }
 
-    fun remove(id: Int): Unit {
+    fun remove(id: Int) {
         targets.remove(id)
     }
 
@@ -59,10 +59,10 @@ constructor(
     }
 
     protected fun performChangeState(id: Int, target: T, state: S) {
-        (stateChangers[id] ?: defaultStateChanger)?.changeState(target, state)
+        getStateChanger(id)?.changeState(target, state)
     }
 
-    protected open fun isActualState(target: T, state: S): Boolean = true
+    protected open fun isActualState(target: T, state: S): Boolean = false
 
     private val targets = SparseArray<T?>()
     private val states = SparseArray<S>()

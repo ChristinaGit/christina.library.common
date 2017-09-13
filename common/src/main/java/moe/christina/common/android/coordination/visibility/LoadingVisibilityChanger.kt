@@ -4,7 +4,8 @@ import android.support.annotation.CallSuper
 import android.view.View
 import moe.christina.common.android.view.ContentLoaderProgressBar
 
-open class ProgressVisibilityChanger @JvmOverloads
+open class LoadingVisibilityChanger
+@JvmOverloads
 constructor(
     invisibleVisibility: Int = VisibilityChanger.DEFAULT_INVISIBLE_VISIBILITY
 ) : VisibilityChanger(invisibleVisibility) {

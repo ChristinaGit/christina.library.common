@@ -1,9 +1,15 @@
 package moe.christina.common.android.coordination
 
 import android.view.View
+import moe.christina.common.android.coordination.visibility.LoadingVisibilityChanger
+import moe.christina.common.core.coordination.state.StateChanger
 import moe.christina.common.core.coordination.state.StateCoordinator
 
-open class LoadingVisibilityCoordinator : StateCoordinator<View, Boolean>() {
+open class LoadingVisibilityCoordinator
+@JvmOverloads
+constructor(
+    defaultStateChanger: StateChanger<View, Boolean>? = LoadingVisibilityChanger()
+) : StateCoordinator<View, Boolean>(defaultStateChanger) {
     companion object {
         @JvmStatic
         private var idIndexer = 0
@@ -20,6 +26,16 @@ open class LoadingVisibilityCoordinator : StateCoordinator<View, Boolean>() {
         @JvmStatic
         val ERROR_VIEW_ID = newId()
     }
+
+    fun addContent(target: View) = add(CONTENT_VIEW_ID, target)
+    fun addNoContent(target: View) = add(NO_CONTENT_VIEW_ID, target)
+    fun addLoading(target: View) = add(LOADING_VIEW_ID, target)
+    fun addError(target: View) = add(ERROR_VIEW_ID, target)
+
+    fun removeContent() = remove(CONTENT_VIEW_ID)
+    fun removeNoContent() = remove(NO_CONTENT_VIEW_ID)
+    fun removeLoading() = remove(LOADING_VIEW_ID)
+    fun removeError() = remove(ERROR_VIEW_ID)
 
     var contentVisibilityChanger
         get() = getStateChanger(CONTENT_VIEW_ID)
@@ -78,4 +94,7 @@ open class LoadingVisibilityCoordinator : StateCoordinator<View, Boolean>() {
         isLoadingVisible = true
         isErrorVisible = false
     }
+
+    override fun isActualState(target: View, state: Boolean): Boolean =
+        (state && target.visibility == View.VISIBLE) || super.isActualState(target, state)
 }
