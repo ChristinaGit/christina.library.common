@@ -14,22 +14,23 @@ import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import moe.christina.common.android.ActivityResultProvider
 import moe.christina.common.android.RequestPermissionsResultProvider
-import moe.christina.common.android.event.ActivityResultEvent
-import moe.christina.common.android.event.RequestPermissionsResultEvent
+import moe.christina.common.android.event.ActivityResultEventData
+import moe.christina.common.android.event.RequestPermissionsResultEventData
+import moe.christina.common.event.Event
+import moe.christina.common.event.Events
+import moe.christina.common.event.invoke
 
 abstract class ObservableFragment : Fragment(),
     ActivityResultProvider,
     RequestPermissionsResultProvider,
     LifecycleProvider<FragmentEvent> {
-    final override val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
-        get() = onRequestPermissionsResultSubject.hide()
+    final override val onRequestPermissionsResult: Event<RequestPermissionsResultEventData>
+        get() = onRequestPermissionsResultEvent
 
-    final override val onActivityResult: Observable<ActivityResultEvent>
-        get() = onActivityResultSubject.hide()
+    final override val onActivityResult: Event<ActivityResultEventData>
+        get() = onActivityResultEvent
 
     @CheckResult
     final override fun lifecycle(): Observable<FragmentEvent> = lifecycleSubject.hide()
@@ -46,7 +47,7 @@ abstract class ObservableFragment : Fragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        riseOnActivityResultEvent(ActivityResultEvent(requestCode, resultCode, data))
+        onActivityResultEvent(ActivityResultEventData(requestCode, resultCode, data))
     }
 
     @CallSuper
@@ -56,8 +57,8 @@ abstract class ObservableFragment : Fragment(),
         grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        val event = RequestPermissionsResultEvent(requestCode, permissions.toList(), grantResults.toList())
-        riseOnRequestPermissionsResultEvent(event)
+        val event = RequestPermissionsResultEventData(requestCode, permissions.toList(), grantResults.toList())
+        onRequestPermissionsResultEvent(event)
     }
 
     @CallSuper
@@ -141,16 +142,9 @@ abstract class ObservableFragment : Fragment(),
     protected open fun onReleaseInjectedMembers() {
     }
 
-    private fun riseOnActivityResultEvent(event: ActivityResultEvent) =
-        onActivityResultSubject.onNext(event)
+    private fun riseLifecycleEvent(event: FragmentEvent) = lifecycleSubject.onNext(event)
 
-    private fun riseOnRequestPermissionsResultEvent(event: RequestPermissionsResultEvent) =
-        onRequestPermissionsResultSubject.onNext(event)
-
-    private fun riseLifecycleEvent(event: FragmentEvent) =
-        lifecycleSubject.onNext(event)
-
-    private val onActivityResultSubject: Subject<ActivityResultEvent> = PublishSubject.create()
-    private val onRequestPermissionsResultSubject: Subject<RequestPermissionsResultEvent> = PublishSubject.create()
     private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
+    private val onRequestPermissionsResultEvent = Events.basic<RequestPermissionsResultEventData>()
+    private val onActivityResultEvent = Events.basic<ActivityResultEventData>()
 }

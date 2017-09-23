@@ -1,8 +1,8 @@
 package moe.christina.common.android.view.recycler.adapter
 
 import android.support.v7.widget.RecyclerView.Adapter
-import moe.christina.common.core.adapter.position.generic.PositionAdapter
-import moe.christina.common.core.adapter.position.generic.context.PositionContext
+import moe.christina.common.position_adapter.generic.PositionAdapter
+import moe.christina.common.position_adapter.generic.context.PositionContext
 
 interface WithPositionAdapterUtility<out T> {
     val positionAdapter: T

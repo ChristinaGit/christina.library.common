@@ -1,8 +1,8 @@
 package moe.christina.common.android
 
-import io.reactivex.Observable
-import moe.christina.common.android.event.RequestPermissionsResultEvent
+import moe.christina.common.android.event.RequestPermissionsResultEventData
+import moe.christina.common.event.Event
 
 interface RequestPermissionsResultProvider {
-    val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
+    val onRequestPermissionsResult: Event<RequestPermissionsResultEventData>
 }

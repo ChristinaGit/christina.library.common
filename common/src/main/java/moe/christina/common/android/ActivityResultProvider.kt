@@ -1,9 +1,9 @@
 package moe.christina.common.android
 
-import io.reactivex.Observable
-import moe.christina.common.android.event.ActivityResultEvent
+import moe.christina.common.android.event.ActivityResultEventData
+import moe.christina.common.event.Event
 
 interface ActivityResultProvider {
-    val onActivityResult: Observable<ActivityResultEvent>
+    val onActivityResult: Event<ActivityResultEventData>
 }
 
