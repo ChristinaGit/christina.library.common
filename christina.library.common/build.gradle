@@ -1,0 +1,34 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 26
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.60"
+    api "org.jetbrains.kotlin:kotlin-reflect:1.1.60"
+
+    api 'com.android.support:support-annotations:27.0.1'
+
+    api "org.jetbrains.anko:anko-commons:0.10.2"
+
+    testApi 'junit:junit:4.12'
+    testApi 'org.mockito:mockito-core:2.8.47'
+    androidTestApi('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestApi "org.mockito:mockito-android:2.8.47"
+}
