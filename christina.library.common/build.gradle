@@ -24,10 +24,7 @@ dependencies {
 
     api "org.jetbrains.anko:anko-commons:0.10.2"
 
-    testApi 'junit:junit:4.12'
-    testApi 'org.mockito:mockito-core:2.8.47'
-    androidTestApi('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    androidTestApi "org.mockito:mockito-android:2.8.47"
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.1.60'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'io.mockk:mockk:1.5.5'
 }

@@ -1,6 +1,6 @@
 package christina.common.position_adapter.group
 
-import christina.common.position_adapter.PositionContext
+import christina.common.position_adapter.core.context.PositionContext
 
 interface GroupPositionContext : PositionContext {
     fun getGroupCount(): Int

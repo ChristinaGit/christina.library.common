@@ -1,74 +1,91 @@
 package christina.common.state_coordinator.basic
 
-import android.util.SparseArray
-import christina.common.state_coordinator.StateChanger
-import christina.common.state_coordinator.StateChecker
-import christina.common.state_coordinator.StateCoordinator
-import collections.forEach
+import christina.common.core.accessor.MutableAccessor
+import christina.common.exception.reasonableException
+import christina.common.state_coordinator.core.StateCoordinator
+import christina.common.state_coordinator.core.exception.StateCoordinatorErrorReasons.TARGET_ALREADY_ADDED
+import christina.common.state_coordinator.core.exception.StateCoordinatorErrorReasons.TARGET_NOT_FOUND
+import christina.common.state_coordinator.core.exception.StateCoordinatorException
 
-class BasicStateCoordinator<TTarget, TState>
-@JvmOverloads
-constructor(
-    override var defaultStateChanger: StateChanger<TTarget, TState>? = null,
-    override var stateChecker: StateChecker<TTarget, TState>? = null
-) : StateCoordinator<TTarget, TState> {
-    override fun setStateChanger(id: Int, stateChanger: StateChanger<TTarget, TState>?) {
-        stateChangers.append(id, stateChanger)
+class BasicStateCoordinator<in Id : Any, Target : Any, State : Any>(
+    private var stateAccessor: MutableAccessor<Target, State>
+) : StateCoordinator<Id, Target, State> {
+    private val stateAccessors: MutableMap<Id, MutableAccessor<Target, State>> = mutableMapOf()
+    private val targets: MutableMap<Id, Target> = mutableMapOf()
+    private val states: MutableMap<Id, State> = mutableMapOf()
+
+    override fun setStateAccessor(stateAccessor: MutableAccessor<Target, State>) {
+        this.stateAccessor = stateAccessor
     }
 
-    override fun getStateChanger(id: Int): StateChanger<TTarget, TState>? = stateChangers[id] ?: defaultStateChanger
-
-    override fun add(id: Int, target: TTarget) {
-        targets.append(id, target)
-
-        invalidate(id)
-    }
-
-    override fun remove(id: Int) {
-        targets.remove(id)
-    }
-
-    override fun getState(id: Int): TState = states[id]
-
-    override fun setState(id: Int, state: TState) {
-        val currentState = getState(id)
-        if (state != currentState) {
-            states.append(id, state)
-
-            invalidate(id)
+    override fun setStateAccessor(id: Id, stateAccessor: MutableAccessor<Target, State>?) {
+        if (stateAccessor !== null) {
+            stateAccessors[id] = stateAccessor
+        } else {
+            stateAccessors.remove(id)
         }
     }
 
-    override fun setState(state: TState) {
-        targets.forEach { id, _ -> setState(id, state) }
+    override fun getStateAccessor(id: Id) = stateAccessors[id] ?: stateAccessor
+
+    override fun add(id: Id, target: Target) {
+        if (targets.containsKey(id)) {
+            throw StateCoordinatorException(
+                "Target with id:\"${id}\" is already added.",
+                reasonableException(TARGET_ALREADY_ADDED))
+        }
+
+        states[id] = getStateAccessor(id).get(target)
+        targets[id] = target
     }
 
-    override fun invalidate(id: Int) {
-        val target = targets[id]
-        val state = getState(id)
+    override fun remove(id: Id) {
+        targets.remove(id) ?: throw StateCoordinatorException(
+            "Target with id:\"$id\" not found.",
+            reasonableException(TARGET_NOT_FOUND))
+    }
 
-        if (target !== null && state !== null) {
-            invalidate(id, target, state)
+    private fun getTarget(id: Id) =
+        targets[id] ?: throw StateCoordinatorException(
+            "Target with id:\"$id\" not found.",
+            reasonableException(TARGET_NOT_FOUND))
+
+    override fun getState(id: Id): State =
+        states[id] ?: throw StateCoordinatorException(
+            "Target with id:\"$id\" not found.",
+            reasonableException(TARGET_NOT_FOUND))
+
+    override fun setState(id: Id, state: State) {
+        states[id] = state
+
+        invalidate(id, getTarget(id), state)
+    }
+
+    override fun setState(state: State) {
+        for (stateWithId in states) {
+            stateWithId.setValue(state)
+
+            val id = stateWithId.key
+            invalidate(id, getTarget(id), state)
         }
+    }
+
+    override fun invalidate(id: Id) {
+        invalidate(id, getTarget(id), getState(id))
     }
 
     override fun invalidate() {
-        targets.forEach { id, _ -> invalidate(id) }
-    }
-
-    private fun invalidate(id: Int, target: TTarget, state: TState) {
-        if (!isActualState(target, state)) {
-            performChangeState(id, target, state)
+        for (targetWithId in targets) {
+            val id = targetWithId.key
+            val target = targetWithId.value
+            invalidate(id, target, getState(id))
         }
     }
 
-    private fun performChangeState(id: Int, target: TTarget, state: TState) {
-        getStateChanger(id)?.changeState(target, state)
+    private fun invalidate(id: Id, target: Target, state: State) {
+        val stateAccessor = getStateAccessor(id)
+        if (stateAccessor.get(target) != state) {
+            stateAccessor.set(target, state)
+        }
     }
-
-    private fun isActualState(target: TTarget, state: TState): Boolean = stateChecker?.checkState(target, state) ?: false
-
-    private val targets = SparseArray<TTarget?>()
-    private val states = SparseArray<TState>()
-    private val stateChangers = SparseArray<StateChanger<TTarget, TState>>()
 }

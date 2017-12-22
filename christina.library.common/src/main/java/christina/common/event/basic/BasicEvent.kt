@@ -1,8 +1,8 @@
 package christina.common.event.basic
 
 import android.support.annotation.CallSuper
-import christina.common.event.EventListener
-import christina.common.event.InternalEvent
+import christina.common.event.core.EventListener
+import christina.common.event.core.InternalEvent
 import java.util.LinkedList
 
 open class BasicEvent<TEventData> : InternalEvent<TEventData> {

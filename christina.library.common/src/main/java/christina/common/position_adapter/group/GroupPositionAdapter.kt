@@ -1,7 +1,7 @@
 package christina.common.position_adapter.group
 
 import android.support.annotation.CheckResult
-import christina.common.position_adapter.PositionAdapter
+import christina.common.position_adapter.core.PositionAdapter
 
 open class GroupPositionAdapter(override val context: GroupPositionContext) : PositionAdapter(context) {
     fun getGroupPosition(group: Int, index: Int): Int {
