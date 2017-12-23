@@ -1,6 +1,6 @@
 package christina.common.exception
 
 object ExceptionDefaultSettings {
-    const val enableSuppression: Boolean = false
-    const val writableStackTrace: Boolean = true
+    const val ENABLE_SUPPRESSION: Boolean = false
+    const val WRITABLE_STACKTRACE: Boolean = true
 }

@@ -1,19 +1,21 @@
 package christina.common.data.presistence.storage.core.store
 
+import christina.common.data.presistence.storage.core.store.query.StoreQuery
+
 interface RelationStore<
-    out TBindEntity,
-    out TLeftEntity,
-    out TRightEntity,
-    in TLeftKey,
-    in TRightKey,
-    in TEntityData,
-    in TSelector> : AbstractStore<TBindEntity, TEntityData, TSelector> {
+    out BindEntity,
+    out LeftEntity,
+    out RightEntity,
+    in LeftKey,
+    in RightKey,
+    in EntityData,
+    in Selector> : AbstractStore<BindEntity, EntityData, Selector> {
 
-    fun queryLeft(rightKey: TRightKey): StoreQuery<TLeftEntity>
-    fun queryRight(leftKey: TLeftKey): StoreQuery<TRightEntity>
+    fun queryLeft(rightKey: RightKey): StoreQuery<LeftEntity>
+    fun queryRight(leftKey: LeftKey): StoreQuery<RightEntity>
 
-    fun bind(leftKey: TLeftKey, rightKey: TRightKey, data: TEntityData)
+    fun bind(leftKey: LeftKey, rightKey: RightKey, data: EntityData)
 
-    fun unbind(leftKey: TLeftKey, rightKey: TRightKey)
-    fun unbind(selector: TSelector)
+    fun unbind(leftKey: LeftKey, rightKey: RightKey)
+    fun unbind(selector: Selector)
 }

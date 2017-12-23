@@ -5,8 +5,8 @@ import christina.common.exception.reasonableException
 import christina.common.position_adapter.core.context.PositionContext
 import christina.common.position_adapter.core.context.getIndexRange
 import christina.common.position_adapter.core.context.getPositionRange
-import christina.common.position_adapter.core.exception.PositionAdapterErrorReasons.ILLEGAL_INDEX
-import christina.common.position_adapter.core.exception.PositionAdapterErrorReasons.ILLEGAL_POSITION
+import christina.common.position_adapter.core.exception.PositionAdapterErrorReason.ILLEGAL_INDEX
+import christina.common.position_adapter.core.exception.PositionAdapterErrorReason.ILLEGAL_POSITION
 import christina.common.position_adapter.core.exception.PositionAdapterException
 
 open class PositionAdapter(open val context: PositionContext) {

@@ -1,9 +1,9 @@
 package christina.common.data.presistence.storage.core.store
 
 interface Store<
-    TEntity,
-    in TEntityData,
-    in TSelector> : AbstractStore<TEntity, TEntityData, TSelector> {
+    out Entity,
+    in EntityData,
+    in Selector> : AbstractStore<Entity, EntityData, Selector> {
 
-    fun create(data: TEntityData): TEntity
+    fun create(data: EntityData): Entity
 }

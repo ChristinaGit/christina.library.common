@@ -5,6 +5,6 @@ open class IllegalOperationException
 constructor(
     message: String? = null,
     cause: Throwable? = null,
-    enableSuppression: Boolean = ExceptionDefaultSettings.enableSuppression,
-    writableStackTrace: Boolean = ExceptionDefaultSettings.writableStackTrace
+    enableSuppression: Boolean = ExceptionDefaultSettings.ENABLE_SUPPRESSION,
+    writableStackTrace: Boolean = ExceptionDefaultSettings.WRITABLE_STACKTRACE
 ) : RuntimeException(message, cause, enableSuppression, writableStackTrace)

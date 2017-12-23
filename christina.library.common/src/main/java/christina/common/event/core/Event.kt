@@ -1,6 +1,6 @@
 package christina.common.event.core
 
-interface Event<out TEventData> {
-    fun addListener(listener: EventListener<TEventData>)
-    fun removeListener(listener: EventListener<TEventData>)
+interface Event<out EventData> {
+    fun addListener(listener: EventListener<EventData>)
+    fun removeListener(listener: EventListener<EventData>)
 }

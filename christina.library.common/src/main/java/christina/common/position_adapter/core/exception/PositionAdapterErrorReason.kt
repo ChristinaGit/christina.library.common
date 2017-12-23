@@ -1,6 +1,6 @@
 package christina.common.position_adapter.core.exception
 
-enum class PositionAdapterErrorReasons {
+enum class PositionAdapterErrorReason {
     ILLEGAL_POSITION,
     ILLEGAL_INDEX,
 }

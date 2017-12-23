@@ -5,5 +5,5 @@ import christina.common.event.core.InternalEvent
 
 object Events {
     @JvmStatic
-    fun <TEventData> basic(): InternalEvent<TEventData> = BasicEvent()
+    fun <EventData> basic(): InternalEvent<EventData> = BasicEvent()
 }

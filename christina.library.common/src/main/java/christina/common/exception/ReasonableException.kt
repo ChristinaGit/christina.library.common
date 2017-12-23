@@ -1,5 +1,8 @@
 package christina.common.exception
 
+import christina.common.exception.ExceptionDefaultSettings.ENABLE_SUPPRESSION
+import christina.common.exception.ExceptionDefaultSettings.WRITABLE_STACKTRACE
+
 open class ReasonableException
 @JvmOverloads
 constructor(
@@ -8,15 +11,17 @@ constructor(
     val reasonDescription: String? = null,
     message: String? = null,
     cause: Throwable? = null,
-    enableSuppression: Boolean = ExceptionDefaultSettings.enableSuppression,
-    writableStackTrace: Boolean = ExceptionDefaultSettings.writableStackTrace
+    enableSuppression: Boolean = ENABLE_SUPPRESSION,
+    writableStackTrace: Boolean = WRITABLE_STACKTRACE
 ) : RuntimeException(buildMessage(reasonGroup, reason, reasonDescription, message), cause, enableSuppression, writableStackTrace) {
     companion object {
         @JvmStatic
-        private fun buildMessage(reasonGroup: String?,
-                                 reason: String?,
-                                 reasonDescription: String?,
-                                 message: String?): String? =
+        private fun buildMessage(
+            reasonGroup: String?,
+            reason: String?,
+            reasonDescription: String?,
+            message: String?
+        ): String? =
             if (reasonGroup === null
                 && reason === null
                 && reasonDescription === null) {

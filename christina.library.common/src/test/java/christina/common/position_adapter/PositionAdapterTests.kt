@@ -4,7 +4,7 @@ import christina.common.exception.ReasonableException
 import christina.common.exception.hasReason
 import christina.common.position_adapter.core.PositionAdapter
 import christina.common.position_adapter.core.context.PositionContext
-import christina.common.position_adapter.core.exception.PositionAdapterErrorReasons
+import christina.common.position_adapter.core.exception.PositionAdapterErrorReason
 import christina.common.position_adapter.core.exception.PositionAdapterException
 import io.mockk.every
 import io.mockk.mockk
@@ -95,7 +95,7 @@ class PositionAdapterTests {
         //endregion
 
         //region Assert
-        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReasons.ILLEGAL_POSITION))
+        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReason.ILLEGAL_POSITION))
         //endregion
     }
 
@@ -116,7 +116,7 @@ class PositionAdapterTests {
         //endregion
 
         //region Assert
-        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReasons.ILLEGAL_POSITION))
+        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReason.ILLEGAL_POSITION))
         //endregion
     }
 
@@ -153,7 +153,7 @@ class PositionAdapterTests {
         //endregion
 
         //region Assert
-        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReasons.ILLEGAL_INDEX))
+        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReason.ILLEGAL_INDEX))
         //endregion
     }
 
@@ -174,7 +174,7 @@ class PositionAdapterTests {
         //endregion
 
         //region Assert
-        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReasons.ILLEGAL_INDEX))
+        assertTrue(exception !== null && exception.hasReason(PositionAdapterErrorReason.ILLEGAL_INDEX))
         //endregion
     }
 }

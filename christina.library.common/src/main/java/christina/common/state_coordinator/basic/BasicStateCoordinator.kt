@@ -3,8 +3,8 @@ package christina.common.state_coordinator.basic
 import christina.common.core.accessor.MutableAccessor
 import christina.common.exception.reasonableException
 import christina.common.state_coordinator.core.StateCoordinator
-import christina.common.state_coordinator.core.exception.StateCoordinatorErrorReasons.TARGET_ALREADY_ADDED
-import christina.common.state_coordinator.core.exception.StateCoordinatorErrorReasons.TARGET_NOT_FOUND
+import christina.common.state_coordinator.core.exception.StateCoordinatorErrorReason.TARGET_ALREADY_ADDED
+import christina.common.state_coordinator.core.exception.StateCoordinatorErrorReason.TARGET_NOT_FOUND
 import christina.common.state_coordinator.core.exception.StateCoordinatorException
 
 class BasicStateCoordinator<in Id : Any, Target : Any, State : Any>(

@@ -2,7 +2,7 @@ package christina.common.data.presistence.storage.fake
 
 import christina.common.data.presistence.storage.core.StorageTransaction
 
-object FakeStorageTransaction : StorageTransaction {
+open class FakeStorageTransaction : StorageTransaction {
     override fun commit() {
     }
 

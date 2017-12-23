@@ -1,6 +1,6 @@
 package christina.common.state_coordinator.core.exception
 
-enum class StateCoordinatorErrorReasons {
+enum class StateCoordinatorErrorReason {
     TARGET_NOT_FOUND,
     TARGET_ALREADY_ADDED,
 }
