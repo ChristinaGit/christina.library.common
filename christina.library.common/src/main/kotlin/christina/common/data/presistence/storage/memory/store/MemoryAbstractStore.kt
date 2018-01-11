@@ -2,45 +2,49 @@ package christina.common.data.presistence.storage.memory.store
 
 import android.support.annotation.CallSuper
 import christina.common.data.presistence.storage.core.store.AbstractStore
-import christina.common.data.presistence.storage.core.store.query.StoreQuery
-import christina.common.data.presistence.storage.core.store.query.storeQuery
 
 abstract class MemoryAbstractStore<
     Entity,
     in EntityData,
-    in Selector>
+    in Selector,
+    out Query>
 @JvmOverloads
 constructor(
     protected val entities: MutableCollection<Entity> = mutableListOf()
-) : AbstractStore<Entity, EntityData, Selector> {
+) : AbstractStore<EntityData, Selector, Query> {
 
-    final override fun query(selector: Selector): StoreQuery<Entity> =
+    @CallSuper
+    override fun query(selector: Selector): Query =
         entities
             .filter { applySelector(it, selector) }
-            .map(this::copyEntry)
+            .map(this::extractEntity)
             .let(this::transformToQuery)
 
-    final override fun queryAll(): StoreQuery<Entity> =
+    @CallSuper
+    override fun queryAll(): Query =
         entities
-            .map(this::copyEntry)
+            .map(this::extractEntity)
             .let(this::transformToQuery)
 
-    final override fun update(selector: Selector, data: EntityData) {
+    @CallSuper
+    override fun update(selector: Selector, data: EntityData) {
         entities
             .filter { applySelector(it, selector) }
             .forEach { updateEntity(it, data) }
     }
 
-    final override fun updateAll(data: EntityData) {
+    @CallSuper
+    override fun updateAll(data: EntityData) {
         entities.forEach { updateEntity(it, data) }
     }
 
-    final override fun delete(selector: Selector) {
+    @CallSuper
+    override fun delete(selector: Selector) {
         entities.removeAll { applySelector(it, selector) }
     }
 
     @CallSuper
-    final override fun deleteAll() {
+    override fun deleteAll() {
         entities.clear()
     }
 
@@ -48,7 +52,7 @@ constructor(
 
     protected abstract fun updateEntity(entity: Entity, data: EntityData)
 
-    protected open fun transformToQuery(entities: Iterable<Entity>): StoreQuery<Entity> = storeQuery(entities)
+    protected abstract fun transformToQuery(entities: Iterable<Entity>): Query
 
-    protected abstract fun copyEntry(entity: Entity): Entity
+    protected abstract fun extractEntity(entity: Entity): Entity
 }

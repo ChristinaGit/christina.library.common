@@ -1,18 +1,19 @@
 package christina.common.data.presistence.storage.core.store
 
-import christina.common.data.presistence.storage.core.store.query.StoreQuery
-
 interface RelationStore<
     out BindEntity,
-    out LeftEntity,
-    out RightEntity,
     in LeftKey,
     in RightKey,
     in EntityData,
-    in Selector> : AbstractStore<BindEntity, EntityData, Selector> {
+    in Selector,
+    out BindQuery,
+    out LeftQuery,
+    out RightQuery> : AbstractStore<EntityData, Selector, BindQuery> {
 
-    fun queryLeft(rightKey: RightKey): StoreQuery<LeftEntity>
-    fun queryRight(leftKey: LeftKey): StoreQuery<RightEntity>
+    fun create(leftKey: LeftKey, rightKey: RightKey, data: EntityData): BindEntity
+
+    fun queryLeft(rightKey: RightKey): LeftQuery
+    fun queryRight(leftKey: LeftKey): RightQuery
 
     fun bind(leftKey: LeftKey, rightKey: RightKey, data: EntityData)
 

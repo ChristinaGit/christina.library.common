@@ -6,9 +6,10 @@ import christina.common.data.presistence.storage.core.store.Store
 abstract class MemoryStore<
     Entity,
     in EntityData,
-    in Selector>(entities: MutableCollection<Entity> = mutableListOf()) :
-    MemoryAbstractStore<Entity, EntityData, Selector>(entities),
-    Store<Entity, EntityData, Selector> {
+    in Selector,
+    out Query>(entities: MutableCollection<Entity> = mutableListOf()) :
+    MemoryAbstractStore<Entity, EntityData, Selector, Query>(entities),
+    Store<Entity, EntityData, Selector, Query> {
 
     @CallSuper
     override fun create(data: EntityData): Entity =

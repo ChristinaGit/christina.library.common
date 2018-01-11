@@ -10,7 +10,7 @@ class EntityDataProperty<Value>
 @JvmOverloads
 constructor(
     private var value: Value,
-    private val comparator: EqualityComparator<Value> = EqualityComparators.default<Value>()
+    private val comparator: EqualityComparator<Value> = EqualityComparators.default()
 ) {
     var state: EntityDataPropertyState = Unchanged
         private set

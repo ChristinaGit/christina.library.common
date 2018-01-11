@@ -8,7 +8,7 @@ import java.util.function.Predicate
 import kotlin.test.assertTrue
 
 abstract class AbstractStoreTests(
-    private val abstractStoreFactory: () -> AbstractStore<Entity, EntityData, Predicate<Entity>>
+    private val abstractStoreFactory: () -> AbstractStore<EntityData, Predicate<Entity>, Iterable<Entity>>
 ) {
     companion object {
         fun generateEntities() = (1L..10L).map { Entity(it).apply { name = "Name $it" } }
@@ -26,7 +26,7 @@ abstract class AbstractStoreTests(
 
     fun generateAbstractStore() = abstractStoreFactory()
 
-    lateinit var abstractStore: AbstractStore<Entity, EntityData, Predicate<Entity>>
+    lateinit var abstractStore: AbstractStore<EntityData, Predicate<Entity>, Iterable<Entity>>
 
     @Before
     fun setup() {

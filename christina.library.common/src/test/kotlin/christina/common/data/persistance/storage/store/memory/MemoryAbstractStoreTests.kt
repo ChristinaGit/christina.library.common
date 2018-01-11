@@ -6,7 +6,7 @@ import java.util.function.Predicate
 
 class MemoryAbstractStoreTests :
     AbstractStoreTests({
-        object : MemoryAbstractStore<Entity, EntityData, Predicate<Entity>>(generateEntities().toMutableList()) {
+        object : MemoryAbstractStore<Entity, EntityData, Predicate<Entity>, Iterable<Entity>>(generateEntities().toMutableList()) {
             override fun applySelector(entity: Entity, selector: Predicate<Entity>): Boolean =
                 selector.test(entity)
 
@@ -14,7 +14,9 @@ class MemoryAbstractStoreTests :
                 entity.name = data.name
             }
 
-            override fun copyEntry(entity: Entity): Entity =
+            override fun transformToQuery(entities: Iterable<Entity>): Iterable<Entity> = entities
+
+            override fun extractEntity(entity: Entity): Entity =
                 Entity(entity.id).apply {
                     name = entity.name
                 }

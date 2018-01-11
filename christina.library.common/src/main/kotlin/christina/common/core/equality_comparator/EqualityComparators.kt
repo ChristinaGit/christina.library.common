@@ -14,8 +14,8 @@ object EqualityComparators {
         }
 
     @JvmStatic
-    fun <T> default() = default
+    fun default() = default
 
     @JvmStatic
-    fun <T> reference() = reference
+    fun reference() = reference
 }

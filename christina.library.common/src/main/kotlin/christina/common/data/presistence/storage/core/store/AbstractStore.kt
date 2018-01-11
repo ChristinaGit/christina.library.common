@@ -1,13 +1,11 @@
 package christina.common.data.presistence.storage.core.store
 
-import christina.common.data.presistence.storage.core.store.query.StoreQuery
-
 interface AbstractStore<
-    out Entity,
     in EntityData,
-    in Selector> {
-    fun query(selector: Selector): StoreQuery<Entity>
-    fun queryAll(): StoreQuery<Entity>
+    in Selector,
+    out Query> {
+    fun query(selector: Selector): Query
+    fun queryAll(): Query
 
     fun update(selector: Selector, data: EntityData)
     fun updateAll(data: EntityData)
