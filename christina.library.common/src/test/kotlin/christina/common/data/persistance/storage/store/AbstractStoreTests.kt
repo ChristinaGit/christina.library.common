@@ -28,7 +28,9 @@ abstract class AbstractStoreTests<
         )
     }
 
-    protected fun generateTarget() = factory(generateEntities())
+    protected fun generateTarget() = factory(defaultEntities)
+
+    protected val defaultEntities: Iterable<Entity> = generateEntities()
 
     protected lateinit var target: Target
 
@@ -60,7 +62,6 @@ abstract class AbstractStoreTests<
     @Test
     fun `queryAll`() {
         //region Arrange
-        val originalEntities = generateEntities()
         //endregion
 
         //region Act
@@ -68,7 +69,7 @@ abstract class AbstractStoreTests<
         //endregion
 
         //region Assert
-        assertTrue(entities.map { it.id }.toLongArray() contentEquals originalEntities.map { it.id }.toLongArray())
+        assertTrue(entities.map { it.id }.toLongArray() contentEquals defaultEntities.map { it.id }.toLongArray())
         //endregion
     }
 

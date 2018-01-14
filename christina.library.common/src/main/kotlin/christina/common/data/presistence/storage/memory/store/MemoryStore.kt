@@ -12,10 +12,12 @@ abstract class MemoryStore<
     Store<Entity, EntityData, Selector, Query> {
 
     @CallSuper
-    override fun create(data: EntityData): Entity =
+    override fun create(data: EntityData): Entity = synchronized(entities) {
         createEntity().also {
-            entities.add(updateEntity(it, data))
+            updateEntity(it, data)
+            entities += it
         }
+    }
 
     protected abstract fun createEntity(): Entity
 }

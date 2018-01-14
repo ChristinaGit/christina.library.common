@@ -14,51 +14,58 @@ constructor(
 ) : AbstractStore<EntityData, Selector, Query> {
 
     @CallSuper
-    override fun query(selector: Selector): Query =
-        entities
-            .filter { applySelector(it, selector) }
-            .map(this::extractEntity)
-            .let(this::transformToQuery)
-
-    @CallSuper
-    override fun queryAll(): Query =
-        entities
-            .map(this::extractEntity)
-            .let(this::transformToQuery)
-
-    @CallSuper
-    override fun update(selector: Selector, data: EntityData) {
-        val entitiesIterator = entities.listIterator()
-        while (entitiesIterator.hasNext()) {
-            val entity = entitiesIterator.next()
-            if (applySelector(entity, selector)) {
-                entitiesIterator.set(updateEntity(entity, data))
-            }
-        }
+    override fun query(selector: Selector): Query = synchronized(entities) {
+        prepareQuery(getEntitiesSnapshot(selector))
     }
 
     @CallSuper
-    override fun updateAll(data: EntityData) {
-        val entitiesIterator = entities.listIterator()
-        while (entitiesIterator.hasNext()) {
-            val entity = entitiesIterator.next()
-            entitiesIterator.set(updateEntity(entity, data))
-        }
+    override fun queryAll(): Query = synchronized(entities) {
+        prepareQuery(getEntitiesSnapshot())
+    }
+
+    @CallSuper
+    override fun update(selector: Selector, data: EntityData) = synchronized(entities) {
+        getEntitiesSnapshot(selector)
+            .forEach { updateEntity(it, data) }
+    }
+
+    @CallSuper
+    override fun updateAll(data: EntityData) = synchronized(entities) {
+        getEntitiesSnapshot()
+            .forEach { updateEntity(it, data) }
     }
 
     @CallSuper
     override fun delete(selector: Selector) {
-        entities.removeAll { applySelector(it, selector) }
+        synchronized(entities) {
+            entities.removeAll(getEntitiesSnapshot(selector))
+        }
     }
 
     @CallSuper
-    override fun deleteAll() {
+    override fun deleteAll() = synchronized(entities) {
         entities.clear()
     }
 
-    protected abstract fun applySelector(entity: Entity, selector: Selector): Boolean
+    protected fun getEntitiesSnapshot(): List<Entity> = synchronized(entities) {
+        entities.toList()
+    }
 
-    protected abstract fun updateEntity(entity: Entity, data: EntityData): Entity
+    protected fun getEntitiesSnapshot(selector: Selector): List<Entity> = synchronized(entities) {
+        applySelector(getEntitiesSnapshot(), selector)
+    }
+
+    protected fun prepareQuery(entities: Iterable<Entity>): Query =
+        entities
+            .map(::extractEntity)
+            .let(::transformToQuery)
+
+    protected abstract fun applySelector(
+        entities: List<Entity>,
+        selector: Selector
+    ): List<Entity>
+
+    protected abstract fun updateEntity(entity: Entity, data: EntityData)
 
     protected abstract fun transformToQuery(entities: Iterable<Entity>): Query
 

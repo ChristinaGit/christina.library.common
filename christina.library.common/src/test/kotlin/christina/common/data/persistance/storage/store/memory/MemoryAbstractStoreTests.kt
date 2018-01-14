@@ -9,13 +9,16 @@ import java.util.function.Predicate
 class MemoryAbstractStoreTests :
     AbstractStoreTests<MemoryAbstractStore<Entity, EntityData, Predicate<Entity>, Iterable<Entity>>>({
         object : MemoryAbstractStore<Entity, EntityData, Predicate<Entity>, Iterable<Entity>>(it.toMutableList()) {
-            override fun applySelector(entity: Entity, selector: Predicate<Entity>): Boolean =
-                selector.test(entity)
+            override fun applySelector(
+                entities: List<Entity>,
+                selector: Predicate<Entity>
+            ): List<Entity> = entities.filter(selector::test)
 
-            override fun updateEntity(entity: Entity, data: EntityData): Entity =
+            override fun updateEntity(entity: Entity, data: EntityData) {
                 entity.apply {
                     name = data.name
                 }
+            }
 
             override fun transformToQuery(entities: Iterable<Entity>): Iterable<Entity> = entities
 

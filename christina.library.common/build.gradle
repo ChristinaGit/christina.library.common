@@ -15,20 +15,20 @@ android {
         }
     }
     sourceSets {
-        main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
     }
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.0"
-    api "org.jetbrains.kotlin:kotlin-reflect:1.2.0"
+    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.10'
+    api 'org.jetbrains.kotlin:kotlin-reflect:1.2.10'
 
     api 'com.android.support:support-annotations:27.0.2'
 
-    api "io.reactivex.rxjava2:rxjava:2.1.6"
+    api 'io.reactivex.rxjava2:rxjava:2.1.6'
 
-    api "org.jetbrains.anko:anko-commons:0.10.2"
+    api 'org.jetbrains.anko:anko-commons:0.10.2'
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.1.60'
     testImplementation 'junit:junit:4.12'
