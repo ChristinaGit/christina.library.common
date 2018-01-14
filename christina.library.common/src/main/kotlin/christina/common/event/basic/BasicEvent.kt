@@ -3,10 +3,10 @@ package christina.common.event.basic
 import android.support.annotation.CallSuper
 import christina.common.event.core.EventListener
 import christina.common.event.core.InternalEvent
-import java.util.LinkedList
+import java.util.concurrent.CopyOnWriteArrayList
 
 open class BasicEvent<EventData> : InternalEvent<EventData> {
-    protected val listeners: MutableList<EventListener<EventData>> = LinkedList()
+    protected val listeners: MutableList<EventListener<EventData>> = CopyOnWriteArrayList()
 
     @CallSuper
     override fun rise(eventData: EventData) {

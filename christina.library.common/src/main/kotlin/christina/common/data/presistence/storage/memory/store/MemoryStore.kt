@@ -7,15 +7,14 @@ abstract class MemoryStore<
     Entity,
     in EntityData,
     in Selector,
-    out Query>(entities: MutableCollection<Entity> = mutableListOf()) :
+    out Query>(entities: MutableList<Entity> = mutableListOf()) :
     MemoryAbstractStore<Entity, EntityData, Selector, Query>(entities),
     Store<Entity, EntityData, Selector, Query> {
 
     @CallSuper
     override fun create(data: EntityData): Entity =
         createEntity().also {
-            updateEntity(it, data)
-            entities.add(it)
+            entities.add(updateEntity(it, data))
         }
 
     protected abstract fun createEntity(): Entity

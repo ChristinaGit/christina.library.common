@@ -10,7 +10,7 @@ abstract class MemoryAbstractStore<
     out Query>
 @JvmOverloads
 constructor(
-    protected val entities: MutableCollection<Entity> = mutableListOf()
+    protected val entities: MutableList<Entity> = mutableListOf()
 ) : AbstractStore<EntityData, Selector, Query> {
 
     @CallSuper
@@ -28,14 +28,22 @@ constructor(
 
     @CallSuper
     override fun update(selector: Selector, data: EntityData) {
-        entities
-            .filter { applySelector(it, selector) }
-            .forEach { updateEntity(it, data) }
+        val entitiesIterator = entities.listIterator()
+        while (entitiesIterator.hasNext()) {
+            val entity = entitiesIterator.next()
+            if (applySelector(entity, selector)) {
+                entitiesIterator.set(updateEntity(entity, data))
+            }
+        }
     }
 
     @CallSuper
     override fun updateAll(data: EntityData) {
-        entities.forEach { updateEntity(it, data) }
+        val entitiesIterator = entities.listIterator()
+        while (entitiesIterator.hasNext()) {
+            val entity = entitiesIterator.next()
+            entitiesIterator.set(updateEntity(entity, data))
+        }
     }
 
     @CallSuper
@@ -50,7 +58,7 @@ constructor(
 
     protected abstract fun applySelector(entity: Entity, selector: Selector): Boolean
 
-    protected abstract fun updateEntity(entity: Entity, data: EntityData)
+    protected abstract fun updateEntity(entity: Entity, data: EntityData): Entity
 
     protected abstract fun transformToQuery(entities: Iterable<Entity>): Query
 

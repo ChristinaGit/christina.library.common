@@ -1,9 +1,9 @@
 package christina.common.indexer.core
 
 interface Indexer<out Index> {
-    val first: Index
+    val firstIndex: Index
 
-    val last: Index
+    val lastIndex: Index
 
     fun newIndex(): Index
 }

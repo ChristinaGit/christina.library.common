@@ -3,14 +3,14 @@ package christina.common.indexer.basic
 import christina.common.indexer.core.Indexer
 
 class BasicIndexer<Index>(
-    override val first: Index,
+    override val firstIndex: Index,
     private val nextIndex: (Index) -> Index
 ) : Indexer<Index> {
-    override var last = first
+    override var lastIndex = firstIndex
 
     override fun newIndex(): Index {
-        last = nextIndex(last)
+        lastIndex = nextIndex(lastIndex)
 
-        return last
+        return lastIndex
     }
 }

@@ -1,5 +1,8 @@
 package christina.common.data.persistance.storage.store
 
+import android.support.annotation.CallSuper
+import christina.common.data.persistance.storage.store.AbstractStoreTests.Companion.Entity
+import christina.common.data.persistance.storage.store.AbstractStoreTests.Companion.EntityData
 import christina.common.data.presistence.storage.core.store.AbstractStore
 import christina.common.divisibleBy
 import org.junit.Before
@@ -7,8 +10,9 @@ import org.junit.Test
 import java.util.function.Predicate
 import kotlin.test.assertTrue
 
-abstract class AbstractStoreTests(
-    private val abstractStoreFactory: () -> AbstractStore<EntityData, Predicate<Entity>, Iterable<Entity>>
+abstract class AbstractStoreTests<
+    Target : AbstractStore<EntityData, Predicate<Entity>, Iterable<Entity>>>(
+    private val factory: (Iterable<Entity>) -> Target
 ) {
     companion object {
         fun generateEntities() = (1L..10L).map { Entity(it).apply { name = "Name $it" } }
@@ -24,13 +28,14 @@ abstract class AbstractStoreTests(
         )
     }
 
-    fun generateAbstractStore() = abstractStoreFactory()
+    protected fun generateTarget() = factory(generateEntities())
 
-    lateinit var abstractStore: AbstractStore<EntityData, Predicate<Entity>, Iterable<Entity>>
+    protected lateinit var target: Target
 
     @Before
-    fun setup() {
-        abstractStore = generateAbstractStore()
+    @CallSuper
+    open fun setup() {
+        target = generateTarget()
     }
 
     @Test
@@ -40,8 +45,8 @@ abstract class AbstractStoreTests(
         //endregion
 
         //region Act
-        val entities = abstractStore.query(selector).asIterable()
-        val entitiesNegate = abstractStore.query(selector.negate()).asIterable()
+        val entities = target.query(selector)
+        val entitiesNegate = target.query(selector.negate())
         //endregion
 
         //region Assert
@@ -59,7 +64,7 @@ abstract class AbstractStoreTests(
         //endregion
 
         //region Act
-        val entities = abstractStore.queryAll().asIterable()
+        val entities = target.queryAll()
         //endregion
 
         //region Assert
@@ -75,9 +80,9 @@ abstract class AbstractStoreTests(
         //endregion
 
         //region Act
-        abstractStore.update(selector, EntityData(newName))
-        val entities = abstractStore.query(selector).asIterable()
-        val entitiesNegate = abstractStore.query(selector.negate()).asIterable()
+        target.update(selector, EntityData(newName))
+        val entities = target.query(selector)
+        val entitiesNegate = target.query(selector.negate())
         //endregion
 
         //region Assert
@@ -95,8 +100,8 @@ abstract class AbstractStoreTests(
         //endregion
 
         //region Act
-        abstractStore.updateAll(EntityData(newName))
-        val entities = abstractStore.queryAll().asIterable()
+        target.updateAll(EntityData(newName))
+        val entities = target.queryAll()
         //endregion
 
         //region Assert
@@ -111,9 +116,9 @@ abstract class AbstractStoreTests(
         //endregion
 
         //region Act
-        val originalEntries = abstractStore.queryAll().asIterable()
-        abstractStore.delete(selector)
-        val entries = abstractStore.queryAll().asIterable()
+        val originalEntries = target.queryAll()
+        target.delete(selector)
+        val entries = target.queryAll()
         //endregion
 
         //region Assert
@@ -128,9 +133,9 @@ abstract class AbstractStoreTests(
         //endregion
 
         //region Act
-        val originalEntries = abstractStore.queryAll().asIterable()
-        abstractStore.deleteAll()
-        val entries = abstractStore.queryAll().asIterable()
+        val originalEntries = target.queryAll()
+        target.deleteAll()
+        val entries = target.queryAll()
         //endregion
 
         //region Assert

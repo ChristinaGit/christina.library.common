@@ -16,9 +16,9 @@ abstract class MemoryRelationStore<
     out RightQuery>
 @JvmOverloads
 constructor(
-    entities: MutableCollection<BindEntity> = mutableListOf(),
-    protected val leftEntities: MutableCollection<LeftEntity> = mutableListOf(),
-    protected val rightEntities: MutableCollection<RightEntity> = mutableListOf()
+    entities: MutableList<BindEntity> = mutableListOf(),
+    protected val leftEntities: MutableList<LeftEntity> = mutableListOf(),
+    protected val rightEntities: MutableList<RightEntity> = mutableListOf()
 ) : MemoryAbstractStore<
     BindEntity,
     EntityData,
@@ -75,8 +75,7 @@ constructor(
     @CallSuper
     override fun create(leftKey: LeftKey, rightKey: RightKey, data: EntityData): BindEntity =
         createEntity(leftKey, rightKey).also {
-            updateEntity(it, data)
-            entities.add(it)
+            entities.add(updateEntity(it, data))
         }
 
     protected abstract fun getLeftKey(entity: LeftEntity): LeftKey
