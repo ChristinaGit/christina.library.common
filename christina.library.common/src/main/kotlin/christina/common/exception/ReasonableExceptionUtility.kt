@@ -17,5 +17,5 @@ inline fun <reified Reason : Enum<Reason>> reasonableException(
     enableSuppression,
     writableStackTrace)
 
-inline fun <reified TEnum : Enum<TEnum>> ReasonableException.hasReason(reason: TEnum) =
-    reasonGroup == TEnum::class.qualifiedName && this.reason == reason.name
+inline fun <reified Reason : Enum<Reason>> ReasonableException.hasReason(reason: Reason) =
+    reasonGroup == Reason::class.qualifiedName && this.reason == reason.name
