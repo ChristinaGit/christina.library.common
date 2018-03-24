@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 27
     }
     buildTypes {
         release {
@@ -21,10 +21,10 @@ android {
 }
 
 dependencies {
-    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.10'
-    api 'org.jetbrains.kotlin:kotlin-reflect:1.2.10'
+    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.31'
+    api 'org.jetbrains.kotlin:kotlin-reflect:1.2.31'
 
-    api 'com.android.support:support-annotations:27.0.2'
+    api 'com.android.support:support-annotations:27.1.0'
 
     api 'io.reactivex.rxjava2:rxjava:2.1.6'
 
